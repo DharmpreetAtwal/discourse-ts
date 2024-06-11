@@ -2,7 +2,7 @@ import { child, get, ref } from "firebase/database";
 import { rtDB } from "../config/firebase";
 
 const useGetOpenGroup = () => {
-  const getOpenGroup = async (id) => {
+  const getOpenGroup = async (id: string) => {
     let openGroup = "";
 
     await get(child(ref(rtDB), `${id}/openGroup`)).then((snapshot) => {

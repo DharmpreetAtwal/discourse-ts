@@ -1,7 +1,6 @@
 import {
   arrayUnion,
   collection,
-  doc,
   getDocs,
   limit,
   query,
@@ -13,7 +12,7 @@ import { db } from "../../config/firebase";
 export const useSendFriendRequest = () => {
   const usersCollectionRef = collection(db, "users");
 
-  const sendFriendRequest = async (to, from) => {
+  const sendFriendRequest = async (to: string, from: string) => {
     const queryFriend = query(
       usersCollectionRef,
       where("email", "==", to),

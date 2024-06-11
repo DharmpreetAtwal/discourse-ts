@@ -1,5 +1,4 @@
 import { setDoc, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-// import { auth, db, providerGoogleAuth, rtDB } from "../config/firebase";
 import { auth, db, providerGoogleAuth, rtDB } from "../config/firebase";
 import { onDisconnect, ref } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";

@@ -6,7 +6,11 @@ export const useOpenPrivateGroup = () => {
   const groupCollection = collection(db, "groups");
   const navigate = useNavigate();
 
-  const openPrivateGroup = async (userID, friendID, privateGroups) => {
+  const openPrivateGroup = async (
+    userID: string,
+    friendID: string,
+    privateGroups
+  ) => {
     if (privateGroups[friendID] == null) {
       await addDoc(groupCollection, {
         creatorID: userID,

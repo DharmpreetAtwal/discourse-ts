@@ -1,13 +1,14 @@
 import { useSendFriendRequest } from "../hooks/friend/useSendFriendRequest";
-import { useOpenPrivateGroup } from "../hooks/useOpenPrivateGroup";
+// import { useOpenPrivateGroup } from "../hooks/useOpenPrivateGroup";
 import { useGetOnlineFriends } from "../hooks/useGetOnlineFriends";
 import { useAddFriend } from "../hooks/friend/useAddFriend";
 import { useCreateGroup } from "../hooks/useCreateGroup";
 import { useGetUserFriends } from "../hooks/useGetUserFriends";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { FC, useRef } from "react";
+import { FriendProps, PrivateGroupTuple } from "../interfaces/types";
 
-function Friend({ userID }) {
+export const Friend: FC<FriendProps> = ({ userID }) => {
   const { friends, pendingFriends, privateGroups } = useGetUserFriends(userID);
   const { onlineFriends } = useGetOnlineFriends(friends);
   const { sendFriendRequest } = useSendFriendRequest();
@@ -15,21 +16,31 @@ function Friend({ userID }) {
   const { addFriend } = useAddFriend();
   const navigate = useNavigate();
 
-  const sendFriendRequestInputRef = useRef(null);
+  const sendFriendRequestInputRef = useRef<HTMLInputElement>(null);
 
-  const handleAddFriendButton = async (friend) => {
+  const handleAddFriendButton = async (friend: string) => {
     await addFriend(userID, friend);
   };
 
-  const handleOpenPrivateGroupBtn = (friendID) => {
-    if (privateGroups[friendID] == null) {
+  const findPrivateGroup = (friendID: string): string | null => {
+    privateGroups.forEach((group: PrivateGroupTuple) => {
+      if (group[0] === friendID) {
+        return group[1];
+      }
+    });
+    return null;
+  };
+
+  const handleOpenPrivateGroupBtn = (friendID: string) => {
+    const privateGroupID = findPrivateGroup(friendID);
+    if (privateGroupID === null) {
       createGroup(userID, [friendID], true).then((doc) => {
         navigate("../privateGroup/" + doc.id + "/" + friendID, {
           replace: true,
         });
       });
     } else {
-      navigate("../privateGroup/" + privateGroups[friendID] + "/" + friendID, {
+      navigate("../privateGroup/" + privateGroupID + "/" + friendID, {
         replace: true,
       });
     }
@@ -64,7 +75,7 @@ function Friend({ userID }) {
                 </div>
               </div>
 
-              {privateGroups[friend.uid] == null ? (
+              {findPrivateGroup(friend.uid) == null ? (
                 <button
                   onClick={() => handleOpenPrivateGroupBtn(friend.uid)}
                   className={
@@ -97,7 +108,7 @@ function Friend({ userID }) {
         <button
           className="bg-green-500 w-1/6"
           onClick={() =>
-            sendFriendRequest(sendFriendRequestInputRef.current.value, userID)
+            sendFriendRequest(sendFriendRequestInputRef.current!.value, userID)
           }
         >
           Add
@@ -126,6 +137,6 @@ function Friend({ userID }) {
       </div>
     </div>
   );
-}
+};
 
 export default Friend;

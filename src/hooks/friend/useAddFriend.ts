@@ -2,7 +2,7 @@ import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 
 export const useAddFriend = () => {
-  const addFriend = async (userID, friend) => {
+  const addFriend = async (userID: string, friend: string) => {
     const userDocRef = doc(db, "users", userID);
     const friendDocRef = doc(db, "users", friend);
 

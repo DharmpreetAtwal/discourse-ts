@@ -1,23 +1,29 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 import Cookies from "universal-cookie";
-import { useRef } from "react";
+// import { useRef } from "react";
 import Friend from "./Friend";
 import { useSetIsOnline } from "../hooks/useSetIsOnline";
 import { useGetPublicGroups } from "../hooks/home/useGetPublicGroups";
 import { useCreateGroup } from "../hooks/useCreateGroup";
 import { useSetOpenGroup } from "../hooks/useSetOpenGroup";
 import useSetGroupLastOpenByUser from "../hooks/useSetGroupLastOpenByUser";
+import { Group, HomeProps } from "../interfaces/types";
 
 const cookies = new Cookies();
 
-export const Home({ userID, setIsAuth, displayName, photoURL }) {
-  const [publicGroups, setPublicGroups] = useState([]);
+export const Home: FC<HomeProps> = ({
+  userID,
+  setIsAuth,
+  displayName,
+  photoURL,
+}) => {
+  const [publicGroups, setPublicGroups] = useState<Group[]>([]);
   const [fetchedPublicGroups, setFetchedPublicGroups] = useState(false);
 
-  const groupIDInputRef = useRef(null);
+  // const groupIDInputRef = useRef(null);
 
   const navigate = useNavigate();
   const { setIsOnline } = useSetIsOnline();
@@ -26,7 +32,7 @@ export const Home({ userID, setIsAuth, displayName, photoURL }) {
   const { setOpenGroup } = useSetOpenGroup();
   const { setGroupLastOpenByUser } = useSetGroupLastOpenByUser();
 
-  const navigateGroup = (groupID) => {
+  const navigateGroup = (groupID: string) => {
     if (groupID !== null) {
       setOpenGroup(userID, groupID);
       setGroupLastOpenByUser(userID, groupID);
@@ -65,12 +71,15 @@ export const Home({ userID, setIsAuth, displayName, photoURL }) {
     });
   };
 
-  const isLatestMessageRead = (group) => {
+  const isLatestMessageRead = (group: Group) => {
     const lastOpened = group.data.lastOpenedByUser[userID];
     if (lastOpened) {
       if (group.latestMessage) {
-        const latestMessageTime = group.latestMessage.data().createdAt.toDate();
-        return latestMessageTime.getTime() < lastOpened.toDate().getTime();
+        const data = group.latestMessage.data();
+        if (data) {
+          const latestMessageTime = data.createdAt.toDate();
+          return latestMessageTime.getTime() < lastOpened.toDate().getTime();
+        }
       } else {
         console.log("No Latest Msg");
       }
@@ -111,6 +120,7 @@ export const Home({ userID, setIsAuth, displayName, photoURL }) {
           </div>
           <div className="flex flex-col w-2/3 h-full overflow-auto items-center">
             {publicGroups.map((group) => {
+              const latestMessage = group.latestMessage;
               return (
                 <div className="flex flex-row w-11/12 m-1" key={group.id}>
                   <div className="flex flex-row bg-purple-500 justify-between items-center w-full px-3 h-16 rounded-l-3xl text-2xl shadow-md">
@@ -132,8 +142,8 @@ export const Home({ userID, setIsAuth, displayName, photoURL }) {
                     ) : (
                       <div className="flex bg-emerald-700 text-lime-400 h-1/2 justify-center items-center px-2 rounded-lg text-xl">
                         New:{" "}
-                        {group.latestMessage
-                          ? group.latestMessage.data().sentBy
+                        {latestMessage && latestMessage.data()
+                          ? latestMessage.data()!.sentBy
                           : "NO ONE"}
                       </div>
                     )}
@@ -170,6 +180,6 @@ export const Home({ userID, setIsAuth, displayName, photoURL }) {
       </div>*/}
     </>
   );
-}
+};
 
 export default Home;

@@ -2,7 +2,7 @@ import { child, get, ref } from "firebase/database";
 import { rtDB } from "../config/firebase";
 
 const useIsOnline = () => {
-  const isOnline = async (id) => {
+  const isOnline = async (id: string) => {
     let online = false;
 
     await get(child(ref(rtDB), `${id}/isOnline`)).then((snapshot) => {

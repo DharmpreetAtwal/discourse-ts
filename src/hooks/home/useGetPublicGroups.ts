@@ -1,24 +1,32 @@
-import { query } from "firebase/database";
-import { collection, doc, getDoc, getDocs, where } from "firebase/firestore";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  query,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  where,
+} from "firebase/firestore";
 import { db } from "../../config/firebase";
+import { Group } from "../../interfaces/types";
 
 export const useGetPublicGroups = () => {
-  const getPublicGroups = async (userID) => {
+  const getPublicGroups = async (userID: string) => {
     const queryPublicGroup = query(
       collection(db, "groups"),
       where("isPrivate", "==", false),
       where("members", "array-contains", userID)
     );
 
-    let groupList = [];
-    var promiseList = [];
+    let groupList: Group[] = [];
+    var promiseList: Promise<DocumentSnapshot<DocumentData, DocumentData>>[] =
+      [];
     const qSnapshot = await getDocs(queryPublicGroup);
 
     qSnapshot.forEach((group) => {
       if (group.id) {
-        const groupMap = {};
-        groupMap.id = group.id;
-        groupMap.data = group.data();
+        let groupMap: Group = { id: group.id, data: group.data() };
         groupList.push(groupMap);
       }
 

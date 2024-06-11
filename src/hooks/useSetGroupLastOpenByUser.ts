@@ -2,7 +2,7 @@ import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 
 const useSetGroupLastOpenByUser = () => {
-  const setGroupLastOpenByUser = (userID, groupID) => {
+  const setGroupLastOpenByUser = (userID: string, groupID: string) => {
     const groupDoc = doc(db, "groups", groupID);
     (async () => {
       const snapshot = await getDoc(groupDoc);

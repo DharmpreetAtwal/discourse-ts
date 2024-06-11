@@ -18,7 +18,7 @@ const useGetUserInfo = () => {
     }
 
     return {
-      uid: null,
+      uid: "",
       displayName: "NULL",
       photoURL: "NULL",
     };

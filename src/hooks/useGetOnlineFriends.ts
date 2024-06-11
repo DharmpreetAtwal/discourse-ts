@@ -1,8 +1,9 @@
 import { onValue, ref } from "firebase/database";
 import { rtDB } from "../config/firebase";
 import { useEffect, useState } from "react";
+import { UserInfo } from "../interfaces/types";
 
-export const useGetOnlineFriends = (friends) => {
+export const useGetOnlineFriends = (friends: UserInfo[]) => {
   const [onlineFriends, setOnlineFriends] = useState([]);
 
   useEffect(() => {

@@ -37,7 +37,7 @@ export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
   };
 
   const getMember = (userID: string): UserInfo => {
-    let member: UserInfo = { uid: null, displayName: "NULL", photoURL: "NULL" };
+    let member: UserInfo = { uid: "", displayName: "NULL", photoURL: "NULL" };
 
     members.forEach((mem) => {
       if (mem.uid === userID) {
