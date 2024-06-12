@@ -1,8 +1,8 @@
 import {
+  Timestamp,
   addDoc,
   collection,
   doc,
-  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
@@ -25,7 +25,7 @@ export const useSendMessage = () => {
 
       if (message !== "") {
         const docRef = await addDoc(groupMessagesCollection, {
-          createdAt: serverTimestamp(),
+          createdAt: Timestamp.now(),
           sentBy: userID,
           message: message,
         });

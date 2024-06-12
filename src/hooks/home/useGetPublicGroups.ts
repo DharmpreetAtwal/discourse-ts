@@ -9,7 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import { Group } from "../../interfaces/types";
+import { Group, GroupData } from "../../interfaces/types";
 
 export const useGetPublicGroups = () => {
   const getPublicGroups = async (userID: string) => {
@@ -26,7 +26,10 @@ export const useGetPublicGroups = () => {
 
     qSnapshot.forEach((group) => {
       if (group.id) {
-        let groupMap: Group = { id: group.id, data: group.data() };
+        // let groupMap: Group = { id: group.id, data: group.data() };
+        const groupData = group.data() as GroupData;
+
+        let groupMap: Group = { id: group.id, data: groupData };
         groupList.push(groupMap);
       }
 
@@ -45,7 +48,7 @@ export const useGetPublicGroups = () => {
 
     const promises = await Promise.all(promiseList);
     promises.forEach((latestMessage, index) => {
-      groupList[index].latestMessage = latestMessage;
+      groupList[index].data.latestMessage = latestMessage;
     });
 
     return groupList;

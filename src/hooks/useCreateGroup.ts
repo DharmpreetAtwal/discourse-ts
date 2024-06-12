@@ -1,12 +1,13 @@
 import {
+  Timestamp,
   addDoc,
   arrayUnion,
   collection,
   doc,
-  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { LastOpenByUser } from "../interfaces/types";
 
 export const useCreateGroup = () => {
   const groupCollectionRef = collection(db, "groups");
@@ -17,10 +18,9 @@ export const useCreateGroup = () => {
     isPrivate: boolean
   ) => {
     let membersArray = [...friends, userID];
-
-    const lastOpenedByUserMap = {};
-    lastOpenedByUserMap[userID] = serverTimestamp();
-
+    const lastOpenedByUserMap: LastOpenByUser[] = [
+      { userID: userID, lastOpened: Timestamp.now() },
+    ];
     const promise = await addDoc(groupCollectionRef, {
       creatorID: userID,
       members: membersArray,
@@ -28,18 +28,22 @@ export const useCreateGroup = () => {
       lastOpenedByUser: lastOpenedByUserMap,
     });
 
-    if (isPrivate) {
-      let promiseArray: Promise<void>[] = [];
-      membersArray.forEach(async (member) => {
-        const memberRef = doc(db, "users/" + member);
-        promiseArray.push(
-          updateDoc(memberRef, {
-            privateGroups: arrayUnion(`${promise.id}`),
-          })
-        );
-      });
+    try {
+      if (isPrivate) {
+        let promiseArray: Promise<void>[] = [];
+        membersArray.forEach(async (member) => {
+          const memberRef = doc(db, "users/" + member);
+          promiseArray.push(
+            updateDoc(memberRef, {
+              privateGroups: arrayUnion(`${promise.id}`),
+            })
+          );
+        });
 
-      Promise.all(promiseArray);
+        Promise.all(promiseArray);
+      }
+    } catch (error) {
+      console.log(error);
     }
 
     return promise;

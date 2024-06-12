@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { UserInfo } from "../interfaces/types";
 
 export const useGetOnlineFriends = (friends: UserInfo[]) => {
-  const [onlineFriends, setOnlineFriends] = useState([]);
+  const [onlineFriends, setOnlineFriends] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (friends.length > 0) {
       friends.forEach((friend) => {
         const isOnlineRef = ref(rtDB, friend.uid + "/isOnline");
         onValue(isOnlineRef, (snapshot) => {
-          const data = snapshot.val();
+          const data: boolean = snapshot.val();
           setOnlineFriends([...onlineFriends, data]);
         });
       });

@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 const cookies = new Cookies();
 
 function App() {
-  const [isAuth, setIsAuth] = useState<boolean>(cookies.get("token-auth"));
+  const [, setIsAuth] = useState<boolean>(cookies.get("token-auth"));
   const [userID, setUserID] = useState<string>(cookies.get("uid"));
   const [displayName, setDisplayName] = useState<string | null>("");
   const [photoURL, setPhotoURL] = useState<string | null>("");

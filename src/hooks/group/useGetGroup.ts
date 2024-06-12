@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { doc, collection, onSnapshot, DocumentData } from "firebase/firestore";
+import { doc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import useGetUserInfo from "../useGetUserInfo";
-import { UserInfo } from "../../interfaces/types";
+import { Message, UserInfo } from "../../interfaces/types";
 
 export const useGetGroup = (userID: string, groupID: string | undefined) => {
   const [members, setMembers] = useState<UserInfo[]>([]);
-  const [messages, setMessages] = useState<DocumentData[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const { getUserInfo } = useGetUserInfo();
 
   useEffect(() => {
@@ -23,10 +23,16 @@ export const useGetGroup = (userID: string, groupID: string | undefined) => {
           const unsubscribe2 = onSnapshot(
             groupMessagesCollection,
             (snapshot) => {
-              let array: DocumentData[] = [];
+              let array: Message[] = [];
               snapshot.forEach((doc) => {
                 if (doc.data().createdAt !== null) {
-                  array.push(doc.data());
+                  let msg: Message = {
+                    id: doc.id,
+                    createdAt: doc.data().createdAt,
+                    message: doc.data().message,
+                    sentBy: doc.data().sentBy,
+                  };
+                  array.push(msg);
                 }
               });
 

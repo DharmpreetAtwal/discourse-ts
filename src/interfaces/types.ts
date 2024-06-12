@@ -1,4 +1,4 @@
-import { DocumentData, DocumentSnapshot } from "firebase/firestore";
+import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 
 export interface AuthProps {
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,12 +29,29 @@ export interface UserInfo {
   photoURL: string;
 }
 
-export interface GroupData extends DocumentData {}
+export interface LastOpenByUser {
+  userID: string;
+  lastOpened: Timestamp;
+}
+
+export interface GroupData {
+  creatorID: string;
+  isPrivate: boolean;
+  lastOpenedByUser?: LastOpenByUser[];
+  latestMessage?: DocumentSnapshot<DocumentData, DocumentData>;
+  members: string[];
+}
 
 export interface Group {
   id: string;
   data: GroupData;
-  latestMessage?: DocumentSnapshot<DocumentData, DocumentData>;
+}
+
+export interface Message {
+  id: string;
+  createdAt: Timestamp;
+  message: string;
+  sentBy: string;
 }
 
 export type PrivateGroupTuple = [friend: string, group: string];

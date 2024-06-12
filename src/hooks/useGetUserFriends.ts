@@ -46,8 +46,7 @@ export const useGetUserFriends = (userID: string) => {
           groupArray.push(getDoc(groupRef));
         });
 
-        // let groupMap: { friendID: string };
-        let privateGroupArray: PrivateGroupTuple[];
+        let privateGroupArray: PrivateGroupTuple[] = [];
         Promise.all(groupArray).then((evaluated) => {
           evaluated.forEach((group) => {
             const data = group.data();

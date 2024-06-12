@@ -122,7 +122,11 @@ export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
             >
               {messages.length > 0 &&
                 messages
-                  .sort((a, b) => a.createdAt.toDate() - b.createdAt.toDate())
+                  .sort(
+                    (a, b) =>
+                      a.createdAt.toDate().valueOf() -
+                      b.createdAt.toDate().valueOf()
+                  )
                   .map((msg) => {
                     const sender = getMember(msg.sentBy);
 
@@ -130,7 +134,7 @@ export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
                       <>
                         {sender.uid && (
                           <div
-                            key={msg.createdAt}
+                            key={msg.id}
                             className="flex flex-row w-auto h-14 bg-amber-500 m-2 p-1 items-center justify-between rounded-3xl "
                           >
                             <div className="flex flex-row h-5/6 items-center justify-center text-xl">

@@ -10,8 +10,7 @@ import { useGetPublicGroups } from "../hooks/home/useGetPublicGroups";
 import { useCreateGroup } from "../hooks/useCreateGroup";
 import { useSetOpenGroup } from "../hooks/useSetOpenGroup";
 import useSetGroupLastOpenByUser from "../hooks/useSetGroupLastOpenByUser";
-import { Group, HomeProps } from "../interfaces/types";
-
+import { Group, HomeProps, LastOpenByUser } from "../interfaces/types";
 const cookies = new Cookies();
 
 export const Home: FC<HomeProps> = ({
@@ -71,14 +70,39 @@ export const Home: FC<HomeProps> = ({
     });
   };
 
-  const isLatestMessageRead = (group: Group) => {
-    const lastOpened = group.data.lastOpenedByUser[userID];
+  const findLastOpenedByUser = (
+    group: Group,
+    userID: string
+  ): null | LastOpenByUser => {
+    const lastOpened = group.data.lastOpenedByUser;
+
+    let userOpen = null;
+
     if (lastOpened) {
-      if (group.latestMessage) {
-        const data = group.latestMessage.data();
+      lastOpened.forEach((open) => {
+        if (open.userID === userID) {
+          userOpen = open;
+        }
+      });
+    }
+    return userOpen;
+  };
+
+  const isLatestMessageRead = (group: Group) => {
+    const lastOpenMap = findLastOpenedByUser(group, userID);
+    console.log(lastOpenMap);
+
+    if (lastOpenMap) {
+      console.log(group.data.latestMessage);
+      if (group.data.latestMessage) {
+        const data = group.data.latestMessage.data();
+        console.log(data);
         if (data) {
           const latestMessageTime = data.createdAt.toDate();
-          return latestMessageTime.getTime() < lastOpened.toDate().getTime();
+          return (
+            latestMessageTime.getTime() <
+            lastOpenMap.lastOpened.toDate().getTime()
+          );
         }
       } else {
         console.log("No Latest Msg");
@@ -120,7 +144,8 @@ export const Home: FC<HomeProps> = ({
           </div>
           <div className="flex flex-col w-2/3 h-full overflow-auto items-center">
             {publicGroups.map((group) => {
-              const latestMessage = group.latestMessage;
+              const latestMessage = group.data.latestMessage;
+              const lastOpenedByUser = findLastOpenedByUser(group, userID);
               return (
                 <div className="flex flex-row w-11/12 m-1" key={group.id}>
                   <div className="flex flex-row bg-purple-500 justify-between items-center w-full px-3 h-16 rounded-l-3xl text-2xl shadow-md">
@@ -128,15 +153,16 @@ export const Home: FC<HomeProps> = ({
                     {isLatestMessageRead(group) ? (
                       <div className="flex text-neutral-700 bg-amber-500 h-1/2 items-center justify-center px-2 rounded-lg">
                         <p>
-                          {group.data.lastOpenedByUser[userID]
-                            .toDate()
-                            .toDateString()
-                            .toString() +
-                            " " +
-                            group.data.lastOpenedByUser[userID]
+                          {lastOpenedByUser &&
+                            lastOpenedByUser.lastOpened
                               .toDate()
-                              .toLocaleTimeString()
-                              .toString()}
+                              .toDateString()
+                              .toString() +
+                              " " +
+                              lastOpenedByUser.lastOpened
+                                .toDate()
+                                .toLocaleTimeString()
+                                .toString()}
                         </p>
                       </div>
                     ) : (
