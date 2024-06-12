@@ -30,13 +30,22 @@ const useSetGroupLastOpenByUser = () => {
 
         if (lastOpenedByUserMap) {
           const index = findUserIndex(userID, lastOpenedByUserMap);
-          if (index >= 0) {
-            lastOpenedByUserMap[index].lastOpened = Timestamp.now();
 
-            await updateDoc(groupDoc, {
-              lastOpenedByUser: lastOpenedByUserMap,
-            });
+          if (index >= 0) {
+            // If user has opened in past
+            lastOpenedByUserMap[index].lastOpened = Timestamp.now();
+          } else {
+            // If user's first time opening
+            const newOpen: LastOpenByUser = {
+              userID: userID,
+              lastOpened: Timestamp.now(),
+            };
+            lastOpenedByUserMap.push(newOpen);
           }
+
+          await updateDoc(groupDoc, {
+            lastOpenedByUser: lastOpenedByUserMap,
+          });
         }
       }
     })();

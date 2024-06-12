@@ -8,10 +8,14 @@ const useGetUserInfo = () => {
     const userSnapshot = await getDoc(userDoc);
 
     if (userSnapshot.exists()) {
-      let userInfo = {
+      let userInfo: UserInfo = {
         uid: userID,
         displayName: userSnapshot.data().displayName,
         photoURL: userSnapshot.data().photoURL,
+        friends: userSnapshot.data().friends,
+        pendingFriends: userSnapshot.data().pendingFriends,
+        email: userSnapshot.data().email,
+        privateGroups: userSnapshot.data().privateGroups,
       };
 
       return userInfo;
@@ -21,6 +25,10 @@ const useGetUserInfo = () => {
       uid: "",
       displayName: "NULL",
       photoURL: "NULL",
+      email: "",
+      friends: [],
+      pendingFriends: [],
+      privateGroups: [],
     };
   };
 

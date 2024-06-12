@@ -1,7 +1,7 @@
 import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../config/firebase";
-import { PrivateGroupTuple } from "../interfaces/types";
+import { PrivateGroup } from "../interfaces/types";
 
 export const useOpenPrivateGroup = () => {
   const groupCollection = collection(db, "groups");
@@ -9,11 +9,11 @@ export const useOpenPrivateGroup = () => {
 
   const findPrivateGroup = (
     friendID: string,
-    privateGroups: PrivateGroupTuple[]
+    privateGroups: PrivateGroup[]
   ): string | null => {
-    privateGroups.forEach((group: PrivateGroupTuple) => {
-      if (group[0] === friendID) {
-        return group[1];
+    privateGroups.forEach((group: PrivateGroup) => {
+      if (group.friend === friendID) {
+        return group.groupID;
       }
     });
     return null;
@@ -22,7 +22,7 @@ export const useOpenPrivateGroup = () => {
   const openPrivateGroup = async (
     userID: string,
     friendID: string,
-    privateGroups: PrivateGroupTuple[]
+    privateGroups: PrivateGroup[]
   ) => {
     const privateGroupID = findPrivateGroup(friendID, privateGroups);
 

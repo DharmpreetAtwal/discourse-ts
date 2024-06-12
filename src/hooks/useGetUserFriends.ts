@@ -8,12 +8,12 @@ import {
 import { db } from "../config/firebase";
 import { useEffect, useState } from "react";
 import useGetUserInfo from "./useGetUserInfo";
-import { PrivateGroupTuple, UserInfo } from "../interfaces/types";
+import { PrivateGroup, UserInfo } from "../interfaces/types";
 
 export const useGetUserFriends = (userID: string) => {
   const [friends, setFriends] = useState<UserInfo[]>([]);
   const [pendingFriends, setPendingFriends] = useState<UserInfo[]>([]);
-  const [privateGroups, setPrivateGroups] = useState<PrivateGroupTuple[]>([]);
+  const [privateGroups, setPrivateGroups] = useState<PrivateGroup[]>([]);
   const { getUserInfo } = useGetUserInfo();
 
   useEffect(() => {
@@ -25,7 +25,9 @@ export const useGetUserFriends = (userID: string) => {
           friendsArray.push(getUserInfo(friend));
         });
 
+        // console.log(friendsArray);
         Promise.all(friendsArray).then((evaluated: UserInfo[]) => {
+          // console.log(evaluated);
           setFriends(evaluated);
         });
 
@@ -38,29 +40,42 @@ export const useGetUserFriends = (userID: string) => {
           setPendingFriends(evaluated);
         });
 
-        let groupArray: Promise<
-          DocumentSnapshot<DocumentData, DocumentData>
-        >[] = [];
-        snapshot.data().privateGroups.forEach((group: string) => {
-          const groupRef = doc(db, "groups", group);
-          groupArray.push(getDoc(groupRef));
-        });
+        try {
+          let groupArray: Promise<
+            DocumentSnapshot<DocumentData, DocumentData>
+          >[] = [];
 
-        let privateGroupArray: PrivateGroupTuple[] = [];
-        Promise.all(groupArray).then((evaluated) => {
-          evaluated.forEach((group) => {
-            const data = group.data();
-            if (data) {
-              let friendID = data.members
-                .filter((item: string) => item !== userID)
-                .at(0);
-              const tuple: PrivateGroupTuple = [friendID, group.id];
-              privateGroupArray.push(tuple);
-            }
+          console.log(snapshot.data().privateGroups);
+          snapshot
+            .data()
+            .privateGroups.forEach(
+              (group: { groupID: string; friend: string }) => {
+                const groupRef = doc(db, "groups/" + group.groupID);
+                groupArray.push(getDoc(groupRef));
+              }
+            );
+
+          let privateGroupArray: PrivateGroup[] = [];
+          Promise.all(groupArray).then((evaluated) => {
+            evaluated.forEach((group) => {
+              const data = group.data();
+              if (data) {
+                let friendID = data.members
+                  .filter((item: string) => item !== userID)
+                  .at(0);
+                const privGroup: PrivateGroup = {
+                  friend: friendID,
+                  groupID: group.id,
+                };
+                privateGroupArray.push(privGroup);
+              }
+            });
+
+            setPrivateGroups(privateGroupArray);
           });
-
-          setPrivateGroups(privateGroupArray);
-        });
+        } catch (error) {
+          console.log(error);
+        }
       }
     });
 

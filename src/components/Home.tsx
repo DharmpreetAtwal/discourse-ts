@@ -90,13 +90,10 @@ export const Home: FC<HomeProps> = ({
 
   const isLatestMessageRead = (group: Group) => {
     const lastOpenMap = findLastOpenedByUser(group, userID);
-    console.log(lastOpenMap);
 
     if (lastOpenMap) {
-      console.log(group.data.latestMessage);
       if (group.data.latestMessage) {
         const data = group.data.latestMessage.data();
-        console.log(data);
         if (data) {
           const latestMessageTime = data.createdAt.toDate();
           return (

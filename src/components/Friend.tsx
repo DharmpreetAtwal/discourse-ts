@@ -6,7 +6,7 @@ import { useCreateGroup } from "../hooks/useCreateGroup";
 import { useGetUserFriends } from "../hooks/useGetUserFriends";
 import { useNavigate } from "react-router-dom";
 import { FC, useRef } from "react";
-import { FriendProps, PrivateGroupTuple } from "../interfaces/types";
+import { FriendProps, PrivateGroup } from "../interfaces/types";
 
 export const Friend: FC<FriendProps> = ({ userID }) => {
   const { friends, pendingFriends, privateGroups } = useGetUserFriends(userID);
@@ -23,12 +23,13 @@ export const Friend: FC<FriendProps> = ({ userID }) => {
   };
 
   const findPrivateGroup = (friendID: string): string | null => {
-    privateGroups.forEach((group: PrivateGroupTuple) => {
-      if (group[0] === friendID) {
-        return group[1];
+    let privGroup: string | null = null;
+    privateGroups.forEach((group: PrivateGroup) => {
+      if (group.friend === friendID) {
+        privGroup = group.groupID;
       }
     });
-    return null;
+    return privGroup;
   };
 
   const handleOpenPrivateGroupBtn = (friendID: string) => {

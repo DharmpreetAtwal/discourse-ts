@@ -27,6 +27,10 @@ export interface UserInfo {
   uid: string;
   displayName: string;
   photoURL: string;
+  email: string;
+  friends: string[];
+  pendingFriends: string[];
+  privateGroups: string[];
 }
 
 export interface LastOpenByUser {
@@ -54,4 +58,7 @@ export interface Message {
   sentBy: string;
 }
 
-export type PrivateGroupTuple = [friend: string, group: string];
+export interface PrivateGroup {
+  friend: string;
+  groupID: string;
+}
