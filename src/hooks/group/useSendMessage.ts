@@ -6,7 +6,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import useSetGroupLastOpenByUser from "../useSetGroupLastOpenByUser";
+import useSetGroupLastOpenByUser from "./useSetGroupLastOpenByUser";
 
 export const useSendMessage = () => {
   const { setGroupLastOpenByUser } = useSetGroupLastOpenByUser();

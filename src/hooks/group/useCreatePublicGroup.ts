@@ -1,6 +1,6 @@
 import { Timestamp, addDoc, collection } from "firebase/firestore";
-import { db } from "../config/firebase";
-import { LastOpenByUser } from "../interfaces/types";
+import { db } from "../../config/firebase";
+import { LastOpenByUser } from "../../interfaces/types";
 
 export const useCreatePublicGroup = () => {
   const groupCollectionRef = collection(db, "groups");

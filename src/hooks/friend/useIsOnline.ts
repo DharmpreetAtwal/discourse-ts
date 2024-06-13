@@ -1,5 +1,5 @@
 import { child, get, ref } from "firebase/database";
-import { rtDB } from "../config/firebase";
+import { rtDB } from "../../config/firebase";
 
 const useIsOnline = () => {
   const isOnline = async (id: string) => {

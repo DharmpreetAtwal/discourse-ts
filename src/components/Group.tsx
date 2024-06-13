@@ -1,8 +1,8 @@
 import React, { FC, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSetOpenGroup } from "../hooks/useSetOpenGroup";
-import useSetGroupLastOpenByUser from "../hooks/useSetGroupLastOpenByUser";
-import useGetOpenGroup from "../hooks/useGetOpenGroup";
+import { useSetOpenGroup } from "../hooks/group/useSetOpenGroup";
+import useSetGroupLastOpenByUser from "../hooks/group/useSetGroupLastOpenByUser";
+import useGetOpenGroup from "../hooks/group/useGetOpenGroup";
 import { GroupProps } from "../interfaces/types";
 import { useGetGroup } from "../hooks/group/useGetGroup";
 import { useSendMessage } from "../hooks/group/useSendMessage";

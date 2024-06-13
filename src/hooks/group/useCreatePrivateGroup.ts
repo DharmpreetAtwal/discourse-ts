@@ -6,8 +6,8 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../config/firebase";
-import { LastOpenByUser } from "../interfaces/types";
+import { db } from "../../config/firebase";
+import { LastOpenByUser } from "../../interfaces/types";
 
 export const useCreatePrivateGroup = () => {
   const groupCollectionRef = collection(db, "groups");

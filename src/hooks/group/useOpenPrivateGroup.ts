@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { PrivateGroup } from "../interfaces/types";
+import { PrivateGroup } from "../../interfaces/types";
 import { useCreatePrivateGroup } from "./useCreatePrivateGroup";
 
 export const useOpenPrivateGroup = () => {

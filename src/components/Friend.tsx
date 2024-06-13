@@ -1,9 +1,9 @@
 import { useSendFriendRequest } from "../hooks/friend/useSendFriendRequest";
-import { useOpenPrivateGroup } from "../hooks/useOpenPrivateGroup";
-import { useGetOnlineFriends } from "../hooks/useGetOnlineFriends";
+import { useOpenPrivateGroup } from "../hooks/group/useOpenPrivateGroup";
+import { useGetOnlineFriends } from "../hooks/friend/useGetOnlineFriends";
 import { useAddFriend } from "../hooks/friend/useAddFriend";
 // import { useCreatePublicGroup } from "../hooks/useCreatePublicGroup";
-import { useGetUserFriends } from "../hooks/useGetUserFriends";
+import { useGetUserFriends } from "../hooks/friend/useGetUserFriends";
 // import { useNavigate } from "react-router-dom";
 import { FC, useRef } from "react";
 import { FriendProps, PrivateGroup } from "../interfaces/types";

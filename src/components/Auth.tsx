@@ -4,7 +4,7 @@ import { onDisconnect, ref } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 // import Cookies from "universal-cookie";
-import { useSetIsOnline } from "../hooks/useSetIsOnline";
+import { useSetIsOnline } from "../hooks/friend/useSetIsOnline";
 import { FC } from "react";
 import { AuthProps } from "../interfaces/types";
 

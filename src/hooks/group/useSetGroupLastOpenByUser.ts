@@ -1,6 +1,6 @@
 import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
-import { GroupData, LastOpenByUser } from "../interfaces/types";
+import { db } from "../../config/firebase";
+import { GroupData, LastOpenByUser } from "../../interfaces/types";
 
 const useSetGroupLastOpenByUser = () => {
   const findUserIndex = (

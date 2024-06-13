@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
-import { UserInfo } from "../interfaces/types";
+import { db } from "../../config/firebase";
+import { UserInfo } from "../../interfaces/types";
 
 const useGetUserInfo = () => {
   const getUserInfo = async (userID: string): Promise<UserInfo> => {

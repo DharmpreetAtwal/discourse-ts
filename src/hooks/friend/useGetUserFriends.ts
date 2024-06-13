@@ -5,10 +5,10 @@ import {
   getDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "../config/firebase";
+import { db } from "../../config/firebase";
 import { useEffect, useState } from "react";
 import useGetUserInfo from "./useGetUserInfo";
-import { PrivateGroup, UserInfo } from "../interfaces/types";
+import { PrivateGroup, UserInfo } from "../../interfaces/types";
 
 export const useGetUserFriends = (userID: string) => {
   const [friends, setFriends] = useState<UserInfo[]>([]);

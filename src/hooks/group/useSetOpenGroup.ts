@@ -1,5 +1,5 @@
 import { ref, set } from "firebase/database";
-import { rtDB } from "../config/firebase";
+import { rtDB } from "../../config/firebase";
 
 export const useSetOpenGroup = () => {
   const setOpenGroup = (userID: string, groupID: string) => {
