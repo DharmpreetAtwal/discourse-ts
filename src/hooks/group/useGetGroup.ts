@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { doc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import useGetUserInfo from "../friend/useGetUserInfo";
-import { Message, UserInfo } from "../../interfaces/types";
+import { UserInfo } from "../../interfaces/types";
+import { Message } from "../../interfaces/group/groupTypes";
 
 export const useGetGroup = (userID: string, groupID: string | undefined) => {
   const [members, setMembers] = useState<UserInfo[]>([]);

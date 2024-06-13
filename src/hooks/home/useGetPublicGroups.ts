@@ -9,7 +9,8 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import { Group, GroupData } from "../../interfaces/types";
+import { Group } from "../../interfaces/group/groupTypes";
+import { GroupData } from "../../interfaces/home/homeTypes";
 
 export const useGetPublicGroups = () => {
   const getPublicGroups = async (userID: string) => {

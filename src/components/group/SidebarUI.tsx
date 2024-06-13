@@ -1,14 +1,10 @@
-import { FC } from "react";
-import { Sidebar } from "../../interfaces/types";
+import { FC, useRef } from "react";
+import { Sidebar } from "../../interfaces/group/groupTypes";
 import { useAddMember } from "../../hooks/group/useAddMember";
 
-export const SidebarUI: FC<Sidebar> = ({
-  members,
-  isPrivate,
-  addMemberInputRef,
-  groupID,
-}) => {
+export const SidebarUI: FC<Sidebar> = ({ members, isPrivate, groupID }) => {
   const { addMember } = useAddMember();
+  const addMemberInputRef = useRef<HTMLInputElement>(null);
 
   const handleBtnAddMember = () => {
     if (addMemberInputRef.current) {

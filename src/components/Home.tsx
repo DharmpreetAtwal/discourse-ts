@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 import Cookies from "universal-cookie";
-// import { useRef } from "react";
 import Friend from "./friend/Friend";
 import { useSetIsOnline } from "../hooks/friend/useSetIsOnline";
 import { useGetPublicGroups } from "../hooks/home/useGetPublicGroups";
 import { useCreatePublicGroup } from "../hooks/group/useCreatePublicGroup";
 import { useSetOpenGroup } from "../hooks/group/useSetOpenGroup";
 import useSetGroupLastOpenByUser from "../hooks/group/useSetGroupLastOpenByUser";
-import { Group, HomeProps, LastOpenByUser } from "../interfaces/types";
+import { Group } from "../interfaces/group/groupTypes";
+import { HomeProps } from "../interfaces/home/homeTypes";
+import { LastOpenByUser } from "../interfaces/home/homeTypes";
+
 const cookies = new Cookies();
 
 export const Home: FC<HomeProps> = ({
@@ -21,8 +23,6 @@ export const Home: FC<HomeProps> = ({
 }) => {
   const [publicGroups, setPublicGroups] = useState<Group[]>([]);
   const [fetchedPublicGroups, setFetchedPublicGroups] = useState(false);
-
-  // const groupIDInputRef = useRef(null);
 
   const navigate = useNavigate();
   const { setIsOnline } = useSetIsOnline();

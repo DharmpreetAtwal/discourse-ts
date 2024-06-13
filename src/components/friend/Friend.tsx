@@ -1,7 +1,8 @@
 import { useSendFriendRequest } from "../../hooks/friend/useSendFriendRequest";
 import { useGetUserFriends } from "../../hooks/friend/useGetUserFriends";
 import { FC, useRef } from "react";
-import { FriendProps, PrivateGroup } from "../../interfaces/types";
+import { FriendProps } from "../../interfaces/friend/friendTypes";
+import { PrivateGroup } from "../../interfaces/types";
 import { FriendTag } from "../friend/FriendTag";
 import { PendingFriendTag } from "../friend/PendingFriendTag";
 

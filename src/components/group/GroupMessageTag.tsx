@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { MessageTag } from "../../interfaces/types";
+import { MessageTag } from "../../interfaces/group/groupTypes";
 
 export const GroupMessageTag: FC<MessageTag> = ({ sender, msg }) => {
   return (

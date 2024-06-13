@@ -10,7 +10,6 @@ export interface GroupProps {
 export interface Sidebar {
   members: UserInfo[];
   isPrivate: boolean;
-  addMemberInputRef: React.RefObject<HTMLInputElement>;
   groupID: string | undefined;
 }
 

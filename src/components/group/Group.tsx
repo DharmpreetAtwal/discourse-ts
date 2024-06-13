@@ -12,7 +12,6 @@ import { SidebarUI } from "./SidebarUI";
 
 export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
   const userMessageInputRef = useRef<HTMLInputElement>(null);
-  const addMemberInputRef = useRef<HTMLInputElement>(null);
   const { groupID } = useParams();
 
   const { members, messages } = useGetGroup(userID, groupID);
@@ -141,7 +140,6 @@ export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
                 groupID={groupID}
                 members={members}
                 isPrivate={isPrivate}
-                addMemberInputRef={addMemberInputRef}
               />
             )}
 
