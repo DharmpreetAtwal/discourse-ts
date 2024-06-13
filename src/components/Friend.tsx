@@ -1,20 +1,21 @@
 import { useSendFriendRequest } from "../hooks/friend/useSendFriendRequest";
-// import { useOpenPrivateGroup } from "../hooks/useOpenPrivateGroup";
+import { useOpenPrivateGroup } from "../hooks/useOpenPrivateGroup";
 import { useGetOnlineFriends } from "../hooks/useGetOnlineFriends";
 import { useAddFriend } from "../hooks/friend/useAddFriend";
-import { useCreateGroup } from "../hooks/useCreateGroup";
+// import { useCreatePublicGroup } from "../hooks/useCreatePublicGroup";
 import { useGetUserFriends } from "../hooks/useGetUserFriends";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { FC, useRef } from "react";
 import { FriendProps, PrivateGroup } from "../interfaces/types";
 
 export const Friend: FC<FriendProps> = ({ userID }) => {
   const { friends, pendingFriends, privateGroups } = useGetUserFriends(userID);
   const { onlineFriends } = useGetOnlineFriends(friends);
+  const { openPrivateGroup } = useOpenPrivateGroup();
   const { sendFriendRequest } = useSendFriendRequest();
-  const { createGroup } = useCreateGroup();
+  // const { createPublicGroup } = useCreatePublicGroup();
   const { addFriend } = useAddFriend();
-  const navigate = useNavigate();
+  //  const navigate = useNavigate();
 
   const sendFriendRequestInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,18 +34,7 @@ export const Friend: FC<FriendProps> = ({ userID }) => {
   };
 
   const handleOpenPrivateGroupBtn = (friendID: string) => {
-    const privateGroupID = findPrivateGroup(friendID);
-    if (privateGroupID === null) {
-      createGroup(userID, [friendID], true).then((doc) => {
-        navigate("../privateGroup/" + doc.id + "/" + friendID, {
-          replace: true,
-        });
-      });
-    } else {
-      navigate("../privateGroup/" + privateGroupID + "/" + friendID, {
-        replace: true,
-      });
-    }
+    openPrivateGroup(userID, friendID, privateGroups);
   };
 
   return (

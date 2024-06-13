@@ -7,7 +7,7 @@ import Cookies from "universal-cookie";
 import Friend from "./Friend";
 import { useSetIsOnline } from "../hooks/useSetIsOnline";
 import { useGetPublicGroups } from "../hooks/home/useGetPublicGroups";
-import { useCreateGroup } from "../hooks/useCreateGroup";
+import { useCreatePublicGroup } from "../hooks/useCreatePublicGroup";
 import { useSetOpenGroup } from "../hooks/useSetOpenGroup";
 import useSetGroupLastOpenByUser from "../hooks/useSetGroupLastOpenByUser";
 import { Group, HomeProps, LastOpenByUser } from "../interfaces/types";
@@ -27,7 +27,7 @@ export const Home: FC<HomeProps> = ({
   const navigate = useNavigate();
   const { setIsOnline } = useSetIsOnline();
   const { getPublicGroups } = useGetPublicGroups();
-  const { createGroup } = useCreateGroup();
+  const { createPublicGroup } = useCreatePublicGroup();
   const { setOpenGroup } = useSetOpenGroup();
   const { setGroupLastOpenByUser } = useSetGroupLastOpenByUser();
 
@@ -65,7 +65,7 @@ export const Home: FC<HomeProps> = ({
   };
 
   const handleCreateGroupBtn = () => {
-    createGroup(userID, [], false).then((doc) => {
+    createPublicGroup(userID, [], false).then((doc) => {
       navigateGroup(doc.id);
     });
   };

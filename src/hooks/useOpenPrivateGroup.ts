@@ -1,22 +1,22 @@
-import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { db } from "../config/firebase";
 import { PrivateGroup } from "../interfaces/types";
+import { useCreatePrivateGroup } from "./useCreatePrivateGroup";
 
 export const useOpenPrivateGroup = () => {
-  const groupCollection = collection(db, "groups");
+  const { createPrivateGroup } = useCreatePrivateGroup();
   const navigate = useNavigate();
 
   const findPrivateGroup = (
     friendID: string,
     privateGroups: PrivateGroup[]
   ): string | null => {
+    let privGroup: string | null = null;
     privateGroups.forEach((group: PrivateGroup) => {
       if (group.friend === friendID) {
-        return group.groupID;
+        privGroup = group.groupID;
       }
     });
-    return null;
+    return privGroup;
   };
 
   const openPrivateGroup = async (
@@ -27,11 +27,7 @@ export const useOpenPrivateGroup = () => {
     const privateGroupID = findPrivateGroup(friendID, privateGroups);
 
     if (privateGroupID === null) {
-      await addDoc(groupCollection, {
-        creatorID: userID,
-        members: [userID, friendID],
-        isPrivate: true,
-      }).then((doc) => {
+      await createPrivateGroup(userID, friendID).then((doc) => {
         navigate("../privateGroup/" + doc.id + "/" + friendID, {
           replace: true,
         });
