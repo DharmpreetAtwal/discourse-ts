@@ -24,10 +24,7 @@ export const useGetUserFriends = (userID: string) => {
         snapshot.data().friends.forEach((friend: string) => {
           friendsArray.push(getUserInfo(friend));
         });
-
-        // console.log(friendsArray);
         Promise.all(friendsArray).then((evaluated: UserInfo[]) => {
-          // console.log(evaluated);
           setFriends(evaluated);
         });
 
@@ -45,7 +42,6 @@ export const useGetUserFriends = (userID: string) => {
             DocumentSnapshot<DocumentData, DocumentData>
           >[] = [];
 
-          console.log(snapshot.data().privateGroups);
           snapshot
             .data()
             .privateGroups.forEach(

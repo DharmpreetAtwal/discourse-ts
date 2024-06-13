@@ -23,6 +23,17 @@ export interface FriendProps {
   userID: string;
 }
 
+export interface FriendTagProps {
+  friendInfo: UserInfo;
+  privateGroup: string | null;
+  userID: string;
+}
+
+export interface PendingFriendsTagProps {
+  friendInfo: UserInfo;
+  userID: string;
+}
+
 export interface UserInfo {
   uid: string;
   displayName: string;
@@ -61,4 +72,9 @@ export interface Message {
 export interface PrivateGroup {
   friend: string;
   groupID: string;
+}
+
+export interface OnlineFriend {
+  friendID: string;
+  isOnline: boolean;
 }
