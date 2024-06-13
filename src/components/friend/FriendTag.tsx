@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { FriendTagProps } from "../interfaces/types";
-import { useOpenPrivateGroup } from "../hooks/group/useOpenPrivateGroup";
-import { useIsOnlineListener } from "../hooks/friend/useIsOnlineListener";
+import { FriendTagProps } from "../../interfaces/types";
+import { useOpenPrivateGroup } from "../../hooks/group/useOpenPrivateGroup";
+import { useIsOnlineListener } from "../../hooks/friend/useIsOnlineListener";
 export const FriendTag: FC<FriendTagProps> = ({
   userID,
   friendInfo,

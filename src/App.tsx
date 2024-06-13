@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Auth } from "./components/Auth";
 import { Home } from "./components/Home";
-import { Group } from "./components/Group";
+import { Group } from "./components/group/Group";
 import Cookies from "universal-cookie";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 

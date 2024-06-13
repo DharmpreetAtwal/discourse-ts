@@ -4,7 +4,7 @@ import { auth } from "../config/firebase";
 import { signOut } from "firebase/auth";
 import Cookies from "universal-cookie";
 // import { useRef } from "react";
-import Friend from "./Friend";
+import Friend from "./friend/Friend";
 import { useSetIsOnline } from "../hooks/friend/useSetIsOnline";
 import { useGetPublicGroups } from "../hooks/home/useGetPublicGroups";
 import { useCreatePublicGroup } from "../hooks/group/useCreatePublicGroup";

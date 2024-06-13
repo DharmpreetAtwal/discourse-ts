@@ -1,9 +1,9 @@
-import { useSendFriendRequest } from "../hooks/friend/useSendFriendRequest";
-import { useGetUserFriends } from "../hooks/friend/useGetUserFriends";
+import { useSendFriendRequest } from "../../hooks/friend/useSendFriendRequest";
+import { useGetUserFriends } from "../../hooks/friend/useGetUserFriends";
 import { FC, useRef } from "react";
-import { FriendProps, PrivateGroup } from "../interfaces/types";
-import { FriendTag } from "./FriendTag";
-import { PendingFriendTag } from "./PendingFriendTag";
+import { FriendProps, PrivateGroup } from "../../interfaces/types";
+import { FriendTag } from "../friend/FriendTag";
+import { PendingFriendTag } from "../friend/PendingFriendTag";
 
 export const Friend: FC<FriendProps> = ({ userID }) => {
   const { friends, pendingFriends, privateGroups } = useGetUserFriends(userID);

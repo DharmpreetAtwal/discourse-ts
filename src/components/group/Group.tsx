@@ -1,13 +1,14 @@
 import React, { FC, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSetOpenGroup } from "../hooks/group/useSetOpenGroup";
-import useSetGroupLastOpenByUser from "../hooks/group/useSetGroupLastOpenByUser";
-import useGetOpenGroup from "../hooks/group/useGetOpenGroup";
-import { GroupProps } from "../interfaces/types";
-import { useGetGroup } from "../hooks/group/useGetGroup";
-import { useSendMessage } from "../hooks/group/useSendMessage";
-import { useAddMember } from "../hooks/group/useAddMember";
-import { UserInfo } from "../interfaces/types";
+import { useSetOpenGroup } from "../../hooks/group/useSetOpenGroup";
+import useSetGroupLastOpenByUser from "../../hooks/group/useSetGroupLastOpenByUser";
+import useGetOpenGroup from "../../hooks/group/useGetOpenGroup";
+import { GroupProps } from "../../interfaces/group/groupTypes";
+import { useGetGroup } from "../../hooks/group/useGetGroup";
+import { useSendMessage } from "../../hooks/group/useSendMessage";
+import { UserInfo } from "../../interfaces/types";
+import { GroupMessageTag } from "./GroupMessageTag";
+import { SidebarUI } from "./SidebarUI";
 
 export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
   const userMessageInputRef = useRef<HTMLInputElement>(null);
@@ -18,7 +19,6 @@ export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const { sendMessage } = useSendMessage();
-  const { addMember } = useAddMember();
   const navigate = useNavigate();
   const { setOpenGroup } = useSetOpenGroup();
   const { setGroupLastOpenByUser } = useSetGroupLastOpenByUser();
@@ -83,13 +83,6 @@ export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
     });
   };
 
-  const handleBtnAddMember = () => {
-    if (addMemberInputRef.current) {
-      addMember(addMemberInputRef.current.value, groupID);
-      addMemberInputRef.current.value = "";
-    }
-  };
-
   const handleBtnOpenSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
@@ -137,80 +130,19 @@ export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
                   )
                   .map((msg) => {
                     const sender = getMember(msg.sentBy);
-
                     return (
-                      <>
-                        {sender.uid && (
-                          <div
-                            key={msg.id}
-                            className="flex flex-row w-auto h-14 bg-amber-500 m-2 p-1 items-center justify-between rounded-3xl "
-                          >
-                            <div className="flex flex-row h-5/6 items-center justify-center text-xl">
-                              <img
-                                className="h-full rounded-2xl mx-2"
-                                src={sender.photoURL}
-                              />
-                              <p> {sender.displayName} </p>
-                            </div>
-
-                            <div className="text-lg">{msg.message}</div>
-
-                            <div>
-                              <p> {msg.createdAt.toDate().toString()} </p>
-                            </div>
-                          </div>
-                        )}
-                      </>
+                      <GroupMessageTag key={msg.id} sender={sender} msg={msg} />
                     );
                   })}
             </div>
 
             {isSidebarVisible && (
-              <div
-                id="sidebar"
-                className="bg-yellow-200 w-1/5 transition-all duration-500"
-              >
-                <div>
-                  <p> Current Members: </p>
-                  {members.map((member) => {
-                    return (
-                      <div
-                        className="flex flex-row w-full h-12 mb-2 justify-center items-center"
-                        key={member.uid}
-                      >
-                        <div className="w-1/6 h-full rounded-full">
-                          <img
-                            className="rounded-full"
-                            src={`${member.photoURL}`}
-                          />
-                        </div>
-
-                        <div className="flex w-5/6 items-center justify-center bg-green-500 p-2 text-2xl">
-                          {member.displayName}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="my-auto">
-                  {!isPrivate && (
-                    <div>
-                      <input
-                        className="bg-green-500 text-gray-900"
-                        ref={addMemberInputRef}
-                        placeholder="Add a Member"
-                      />
-                      <button
-                        className="bg-purple-500"
-                        onClick={handleBtnAddMember}
-                      >
-                        Add Member
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <SidebarUI
+                groupID={groupID}
+                members={members}
+                isPrivate={isPrivate}
+                addMemberInputRef={addMemberInputRef}
+              />
             )}
 
             <div className="fixed bottom-0 p-2 w-full">

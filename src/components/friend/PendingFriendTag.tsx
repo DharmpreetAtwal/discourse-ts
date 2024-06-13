@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { useAddFriend } from "../hooks/friend/useAddFriend";
-import { PendingFriendsTagProps } from "../interfaces/types";
+import { useAddFriend } from "../../hooks/friend/useAddFriend";
+import { PendingFriendsTagProps } from "../../interfaces/types";
 
 export const PendingFriendTag: FC<PendingFriendsTagProps> = ({
   friendInfo,
