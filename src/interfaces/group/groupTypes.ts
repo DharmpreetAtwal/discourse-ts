@@ -3,8 +3,14 @@ import { UserInfo } from "../types";
 import { GroupData } from "../home/homeTypes";
 
 export interface GroupProps {
-  userID: string;
   isPrivate: boolean;
+}
+
+export interface GroupDisplayProps {
+  userID: string;
+  groupID: string;
+  isPrivate: boolean;
+  isSidebarVisible: boolean;
 }
 
 export interface Sidebar {

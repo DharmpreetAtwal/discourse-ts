@@ -1,6 +1,6 @@
 export interface AuthProps {
-  setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
-  setUserID: React.Dispatch<React.SetStateAction<string>>;
+  // setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+  // setUserID: React.Dispatch<React.SetStateAction<string>>;
   setDisplayName: React.Dispatch<React.SetStateAction<string | null>>;
   setPhotoURL: React.Dispatch<React.SetStateAction<string | null>>;
 }

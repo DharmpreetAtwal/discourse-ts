@@ -1,8 +1,8 @@
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 
 export interface HomeProps {
-  userID: string;
-  setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+  // userID: string | undefined;
+  // setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
   displayName: string | null;
   photoURL: string | null;
 }

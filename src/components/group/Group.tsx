@@ -1,85 +1,29 @@
-import React, { FC, useRef, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSetOpenGroup } from "../../hooks/group/useSetOpenGroup";
-import useSetGroupLastOpenByUser from "../../hooks/group/useSetGroupLastOpenByUser";
-import useGetOpenGroup from "../../hooks/group/useGetOpenGroup";
 import { GroupProps } from "../../interfaces/group/groupTypes";
-import { useGetGroup } from "../../hooks/group/useGetGroup";
-import { useSendMessage } from "../../hooks/group/useSendMessage";
-import { UserInfo } from "../../interfaces/types";
-import { GroupMessageTag } from "./GroupMessageTag";
-import { SidebarUI } from "./SidebarUI";
+import { GroupDisplay } from "./GroupDisplay";
+import { UserIDStateContext } from "../../App";
 
-export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
-  const userMessageInputRef = useRef<HTMLInputElement>(null);
+export const Group: FC<GroupProps> = ({ isPrivate }) => {
+  const { userID } = useContext(UserIDStateContext);
   const { groupID } = useParams();
 
-  const { members, messages } = useGetGroup(userID, groupID);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
-  const { sendMessage } = useSendMessage();
   const navigate = useNavigate();
   const { setOpenGroup } = useSetOpenGroup();
-  const { setGroupLastOpenByUser } = useSetGroupLastOpenByUser();
-  const { getOpenGroup } = useGetOpenGroup();
 
-  const isUserMember = () => {
-    let isMember = false;
-
-    members.forEach((member) => {
-      if (member.uid === userID) {
-        isMember = true;
-      }
-    });
-
-    return isMember;
-  };
-
-  const getMember = (userID: string): UserInfo => {
-    let member: UserInfo = {
-      uid: "",
-      displayName: "NULL",
-      photoURL: "NULL",
-      email: "",
-      friends: [],
-      pendingFriends: [],
-      privateGroups: [],
-    };
-
-    members.forEach((mem) => {
-      if (mem.uid === userID) {
-        member = mem;
-      }
-    });
-
-    return member;
-  };
+  useEffect(() => {
+    if (userID === undefined) {
+      navigate("/", { replace: true });
+    }
+  }, [userID]);
 
   // Avoid using setGroupLastOpenByUser() on Home Btn click, causes issues
   const handleBtnHome = () => {
     setOpenGroup(userID, "");
     navigate("/home");
-  };
-
-  const handleBtnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (userMessageInputRef.current) {
-      sendMessage(userID, groupID, userMessageInputRef.current.value);
-      updateOpenGroupMembers();
-      userMessageInputRef.current.value = "";
-    }
-  };
-
-  const updateOpenGroupMembers = () => {
-    members.forEach(async (member) => {
-      let group = await getOpenGroup(member.uid);
-
-      // Only update lastOpened for person who is not sending message
-      // Excludes case that is handled in sendMessage
-      if (member.uid !== userID && group === groupID) {
-        setGroupLastOpenByUser(member.uid, groupID);
-      }
-    });
   };
 
   const handleBtnOpenSidebar = () => {
@@ -112,54 +56,15 @@ export const Group: FC<GroupProps> = ({ userID, isPrivate }) => {
             </button>
           </div>
         </div>
-        {isUserMember() ? (
-          <div className="flex flex-row bg-slate-600 relative h-[90vh] w-full">
-            <div
-              className={
-                "bg-slate-500 pb-16 overflow-auto no-scrollbar " +
-                (isSidebarVisible ? "w-4/5" : "w-full")
-              }
-            >
-              {messages.length > 0 &&
-                messages
-                  .sort(
-                    (a, b) =>
-                      a.createdAt.toDate().valueOf() -
-                      b.createdAt.toDate().valueOf()
-                  )
-                  .map((msg) => {
-                    const sender = getMember(msg.sentBy);
-                    return (
-                      <GroupMessageTag key={msg.id} sender={sender} msg={msg} />
-                    );
-                  })}
-            </div>
-
-            {isSidebarVisible && (
-              <SidebarUI
-                groupID={groupID}
-                members={members}
-                isPrivate={isPrivate}
-              />
-            )}
-
-            <div className="fixed bottom-0 p-2 w-full">
-              <form onSubmit={(e) => handleBtnSubmit(e)}>
-                <input
-                  className="bg-red-500 w-11/12 p-1 text-4xl"
-                  ref={userMessageInputRef}
-                  placeholder="Message"
-                />
-                <button className="bg-orange-500 text-3xl w-1/12" type="submit">
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
+        {groupID !== undefined ? (
+          <GroupDisplay
+            userID={userID}
+            groupID={groupID}
+            isPrivate={isPrivate}
+            isSidebarVisible={isSidebarVisible}
+          />
         ) : (
-          <div>
-            <h1> You are not a member of this group </h1>
-          </div>
+          <p> Invalid Group</p>
         )}
       </div>
     </>

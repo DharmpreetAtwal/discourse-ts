@@ -1,26 +1,23 @@
-import { useState, useEffect, FC } from "react";
+import { useState, useEffect, FC, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 import { signOut } from "firebase/auth";
 import Cookies from "universal-cookie";
-import Friend from "./friend/Friend";
-import { useSetIsOnline } from "../hooks/friend/useSetIsOnline";
-import { useGetPublicGroups } from "../hooks/home/useGetPublicGroups";
-import { useCreatePublicGroup } from "../hooks/group/useCreatePublicGroup";
-import { useSetOpenGroup } from "../hooks/group/useSetOpenGroup";
-import useSetGroupLastOpenByUser from "../hooks/group/useSetGroupLastOpenByUser";
-import { Group } from "../interfaces/group/groupTypes";
-import { HomeProps } from "../interfaces/home/homeTypes";
-import { LastOpenByUser } from "../interfaces/home/homeTypes";
+import Friend from "../friend/Friend";
+import { useSetIsOnline } from "../../hooks/friend/useSetIsOnline";
+import { useGetPublicGroups } from "../../hooks/home/useGetPublicGroups";
+import { useCreatePublicGroup } from "../../hooks/group/useCreatePublicGroup";
+import { useSetOpenGroup } from "../../hooks/group/useSetOpenGroup";
+import useSetGroupLastOpenByUser from "../../hooks/group/useSetGroupLastOpenByUser";
+import { Group } from "../../interfaces/group/groupTypes";
+import { HomeProps } from "../../interfaces/home/homeTypes";
+import { LastOpenByUser } from "../../interfaces/home/homeTypes";
+import { UserIDStateContext } from "../../App";
 
 const cookies = new Cookies();
 
-export const Home: FC<HomeProps> = ({
-  userID,
-  setIsAuth,
-  displayName,
-  photoURL,
-}) => {
+export const Home: FC<HomeProps> = ({ displayName, photoURL }) => {
+  const { userID } = useContext(UserIDStateContext);
   const [publicGroups, setPublicGroups] = useState<Group[]>([]);
   const [fetchedPublicGroups, setFetchedPublicGroups] = useState(false);
 
@@ -40,21 +37,23 @@ export const Home: FC<HomeProps> = ({
   };
 
   useEffect(() => {
-    const handleFetch = async () => {
-      const output = await getPublicGroups(userID);
-      setPublicGroups(output);
-      setFetchedPublicGroups(true);
-    };
+    if (userID === undefined) {
+      navigate("/", { replace: true });
+    } else {
+      const handleFetch = async () => {
+        const output = await getPublicGroups(userID);
+        setPublicGroups(output);
+        setFetchedPublicGroups(true);
+      };
 
-    handleFetch();
-  }, []);
+      handleFetch();
+    }
+  }, [userID]);
 
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
-        setIsAuth(false);
         navigate("/");
-
         cookies.remove("uid", { path: "/" });
 
         setIsOnline(userID, false);
@@ -191,16 +190,6 @@ export const Home: FC<HomeProps> = ({
           </div>
         </div>
       </div>
-      {/*<div>
-        <h2> Enter Your GroupID Name</h2>
-        <input ref={groupIDInputRef} className="bg-orange-500" />
-        <button
-          onClick={() => navigateGroup(groupIDInputRef.current.value)}
-          className="bg-red-500"
-        >
-          Enter Discourse
-        </button>
-      </div>*/}
     </>
   );
 };
