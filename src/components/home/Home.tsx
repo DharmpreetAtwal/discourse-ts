@@ -10,14 +10,14 @@ import { useCreatePublicGroup } from "../../hooks/group/useCreatePublicGroup";
 import { useSetOpenGroup } from "../../hooks/group/useSetOpenGroup";
 import useSetGroupLastOpenByUser from "../../hooks/group/useSetGroupLastOpenByUser";
 import { Group } from "../../interfaces/group/groupTypes";
-import { HomeProps } from "../../interfaces/home/homeTypes";
 import { LastOpenByUser } from "../../interfaces/home/homeTypes";
 import { UserIDStateContext } from "../../App";
 
 const cookies = new Cookies();
 
-export const Home: FC<HomeProps> = ({ displayName, photoURL }) => {
-  const { userID } = useContext(UserIDStateContext);
+export const Home: FC = () => {
+  const { user } = useContext(UserIDStateContext);
+
   const [publicGroups, setPublicGroups] = useState<Group[]>([]);
   const [fetchedPublicGroups, setFetchedPublicGroups] = useState(false);
 
@@ -30,25 +30,25 @@ export const Home: FC<HomeProps> = ({ displayName, photoURL }) => {
 
   const navigateGroup = (groupID: string) => {
     if (groupID !== null) {
-      setOpenGroup(userID, groupID);
-      setGroupLastOpenByUser(userID, groupID);
+      setOpenGroup(user.uid, groupID);
+      setGroupLastOpenByUser(user.uid, groupID);
       navigate("/group/" + groupID);
     }
   };
 
   useEffect(() => {
-    if (userID === undefined) {
+    if (user === undefined) {
       navigate("/", { replace: true });
     } else {
       const handleFetch = async () => {
-        const output = await getPublicGroups(userID);
+        const output = await getPublicGroups(user.uid);
         setPublicGroups(output);
         setFetchedPublicGroups(true);
       };
 
       handleFetch();
     }
-  }, [userID]);
+  }, [user]);
 
   const handleSignOut = () => {
     signOut(auth)
@@ -56,7 +56,7 @@ export const Home: FC<HomeProps> = ({ displayName, photoURL }) => {
         navigate("/");
         cookies.remove("uid", { path: "/" });
 
-        setIsOnline(userID, false);
+        setIsOnline(user.uid, false);
       })
       .catch((err) => {
         console.error(err);
@@ -64,7 +64,7 @@ export const Home: FC<HomeProps> = ({ displayName, photoURL }) => {
   };
 
   const handleCreateGroupBtn = () => {
-    createPublicGroup(userID, [], false).then((doc) => {
+    createPublicGroup(user.uid, [], false).then((doc) => {
       navigateGroup(doc.id);
     });
   };
@@ -88,7 +88,7 @@ export const Home: FC<HomeProps> = ({ displayName, photoURL }) => {
   };
 
   const isLatestMessageRead = (group: Group) => {
-    const lastOpenMap = findLastOpenedByUser(group, userID);
+    const lastOpenMap = findLastOpenedByUser(group, user.uid);
 
     if (lastOpenMap) {
       if (group.data.latestMessage) {
@@ -118,11 +118,11 @@ export const Home: FC<HomeProps> = ({ displayName, photoURL }) => {
           <div>
             <img
               className="max-h-full shadow-xl rounded-full"
-              src={`${photoURL}`}
+              src={`${user.photoURL}`}
             />
           </div>
           <div className="flex bg-blue-300 w-1/5 rounded-2xl shadow-xl text-3xl items-center justify-center">
-            <p>{displayName}</p>
+            <p>{user.displayName}</p>
           </div>
           <div className="flex">
             <button
@@ -136,12 +136,12 @@ export const Home: FC<HomeProps> = ({ displayName, photoURL }) => {
 
         <div className="flex flex-row bg-slate-200 h-[90vh] min-w-screen">
           <div className="flex flex-col w-1/3 bg-slate-600">
-            {fetchedPublicGroups && <Friend userID={userID} />}
+            {fetchedPublicGroups && <Friend userID={user.uid} />}
           </div>
           <div className="flex flex-col w-2/3 h-full overflow-auto items-center">
             {publicGroups.map((group) => {
               const latestMessage = group.data.latestMessage;
-              const lastOpenedByUser = findLastOpenedByUser(group, userID);
+              const lastOpenedByUser = findLastOpenedByUser(group, user.uid);
               return (
                 <div className="flex flex-row w-11/12 m-1" key={group.id}>
                   <div className="flex flex-row bg-purple-500 justify-between items-center w-full px-3 h-16 rounded-l-3xl text-2xl shadow-md">

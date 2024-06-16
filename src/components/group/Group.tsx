@@ -6,7 +6,9 @@ import { GroupDisplay } from "./GroupDisplay";
 import { UserIDStateContext } from "../../App";
 
 export const Group: FC<GroupProps> = ({ isPrivate }) => {
-  const { userID } = useContext(UserIDStateContext);
+  const { user } = useContext(UserIDStateContext);
+  // const userID = credential.user.uid;
+
   const { groupID } = useParams();
 
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -15,14 +17,14 @@ export const Group: FC<GroupProps> = ({ isPrivate }) => {
   const { setOpenGroup } = useSetOpenGroup();
 
   useEffect(() => {
-    if (userID === undefined) {
+    if (user === undefined) {
       navigate("/", { replace: true });
     }
-  }, [userID]);
+  }, [user]);
 
   // Avoid using setGroupLastOpenByUser() on Home Btn click, causes issues
   const handleBtnHome = () => {
-    setOpenGroup(userID, "");
+    setOpenGroup(user.uid, "");
     navigate("/home");
   };
 
@@ -58,7 +60,7 @@ export const Group: FC<GroupProps> = ({ isPrivate }) => {
         </div>
         {groupID !== undefined ? (
           <GroupDisplay
-            userID={userID}
+            userID={user.uid}
             groupID={groupID}
             isPrivate={isPrivate}
             isSidebarVisible={isSidebarVisible}

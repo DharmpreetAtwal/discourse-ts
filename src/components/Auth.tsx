@@ -1,12 +1,11 @@
 import { setDoc, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { auth, db, providerGoogleAuth, rtDB } from "../config/firebase";
 import { onDisconnect, ref } from "firebase/database";
-import { signInWithPopup } from "firebase/auth";
+import { User, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useSetIsOnline } from "../hooks/friend/useSetIsOnline";
 import { FC, useContext, useEffect } from "react";
-import { AuthProps } from "../interfaces/types";
 import { ReactSVG } from "./ReactSVG";
 import { FirebaseSVG } from "./FirebaseSVG";
 import { TypeScriptSVG } from "./TypeScriptSVG";
@@ -14,15 +13,16 @@ import { UserIDStateContext } from "../App";
 
 const cookies = new Cookies();
 
-export const Auth: FC<AuthProps> = ({ setDisplayName, setPhotoURL }) => {
-  const { setUserID } = useContext(UserIDStateContext);
+export const Auth: FC = () => {
+  const { setUser } = useContext(UserIDStateContext);
   const navigate = useNavigate();
   const { setIsOnline } = useSetIsOnline();
 
   useEffect(() => {
-    const uid = cookies.get("uid");
-    if (uid !== undefined) {
-      setUserID(uid);
+    const userCookie: User = cookies.get("user");
+
+    if (userCookie !== undefined) {
+      setUser(userCookie);
       navigate("/home", { replace: true });
     }
   }, []);
@@ -30,12 +30,10 @@ export const Auth: FC<AuthProps> = ({ setDisplayName, setPhotoURL }) => {
   const signInGoogle = async () => {
     try {
       const info = await signInWithPopup(auth, providerGoogleAuth);
-      info.user.displayName;
-      cookies.set("token-auth", info.user.refreshToken);
-      cookies.set("uid", info.user.uid);
-      setUserID(info.user.uid);
-      setDisplayName(info.user.displayName);
-      setPhotoURL(info.user.photoURL);
+      cookies.set("user", info.user);
+      cookies.set("testing", { stuff: "fjkhadslkfha" });
+
+      setUser(info.user);
 
       const docRef = doc(db, "users", info.user.uid);
       const docSnap = await getDoc(docRef);

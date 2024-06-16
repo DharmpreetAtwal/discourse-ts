@@ -5,12 +5,13 @@ import { Group } from "./components/group/Group";
 import Cookies from "universal-cookie";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from "react";
+import { User } from "firebase/auth";
 
 const cookies = new Cookies();
 
 type UserIDContextType = {
-  userID: string;
-  setUserID: React.Dispatch<React.SetStateAction<string>>;
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
 };
 
 export const UserIDStateContext = createContext<UserIDContextType>(
@@ -18,11 +19,8 @@ export const UserIDStateContext = createContext<UserIDContextType>(
 );
 
 function App() {
-  const [userID, setUserID] = useState<string>(cookies.get("uid"));
-  const value = { userID, setUserID };
-
-  const [displayName, setDisplayName] = useState<string | null>("");
-  const [photoURL, setPhotoURL] = useState<string | null>("");
+  const [user, setUser] = useState<User>(cookies.get("user"));
+  const value = { user, setUser };
 
   // A function that adds an attribute to all docs in user collection
   /*useEffect(() => {
@@ -43,19 +41,8 @@ function App() {
       <UserIDStateContext.Provider value={value}>
         <Router>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <Auth
-                  setDisplayName={setDisplayName}
-                  setPhotoURL={setPhotoURL}
-                />
-              }
-            ></Route>
-            <Route
-              path="home"
-              element={<Home displayName={displayName} photoURL={photoURL} />}
-            ></Route>
+            <Route path="/" element={<Auth />}></Route>
+            <Route path="home" element={<Home />}></Route>
             <Route
               path="group/:groupID"
               element={<Group isPrivate={false} />}

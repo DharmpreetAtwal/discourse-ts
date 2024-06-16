@@ -11,7 +11,6 @@ export const useGetGroup = (userID: string, groupID: string | undefined) => {
   const { getUserInfo } = useGetUserInfo();
 
   useEffect(() => {
-    console.log(userID);
     if (groupID) {
       const groupDoc = doc(db, "groups", groupID);
       const groupMessagesCollection = collection(

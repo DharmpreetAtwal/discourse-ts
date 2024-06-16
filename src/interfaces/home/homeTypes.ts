@@ -1,12 +1,5 @@
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 
-export interface HomeProps {
-  // userID: string | undefined;
-  // setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
-  displayName: string | null;
-  photoURL: string | null;
-}
-
 export interface LastOpenByUser {
   userID: string;
   lastOpened: Timestamp;
