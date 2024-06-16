@@ -1,10 +1,8 @@
 import { setDoc, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { auth, db, providerGoogleAuth, rtDB } from "../config/firebase";
-import { onDisconnect, ref } from "firebase/database";
+import { auth, db, providerGoogleAuth } from "../config/firebase";
 import { User, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { useSetIsOnline } from "../hooks/friend/useSetIsOnline";
 import { FC, useContext, useEffect } from "react";
 import { ReactSVG } from "./ReactSVG";
 import { FirebaseSVG } from "./FirebaseSVG";

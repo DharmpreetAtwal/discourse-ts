@@ -94,8 +94,8 @@ export const Home: FC = () => {
 
     if (lastOpenMap) {
       if (group.data.latestMessage) {
-        const data = group.data.latestMessage.data();
-        if (data) {
+        if (group.data.latestMessage.exists()) {
+          const data = group.data.latestMessage.data();
           const latestMessageTime = data.createdAt.toDate();
           return (
             latestMessageTime.getTime() <
@@ -115,83 +115,85 @@ export const Home: FC = () => {
 
   return (
     <>
-      <div className="flex flex-col">
-        <div className="flex flex-row bg-orange-500 h-[10vh] min-w-full p-4 justify-between">
-          <div>
-            <img
-              className="max-h-full shadow-xl rounded-full"
-              src={`${user.photoURL}`}
-            />
-          </div>
-          <div className="flex bg-blue-300 w-1/5 rounded-2xl shadow-xl text-3xl items-center justify-center">
-            <p>{user.displayName}</p>
-          </div>
-          <div className="flex">
-            <button
-              onClick={handleSignOut}
-              className="rounded-3xl px-4 drop-shadow-md text-3xl bg-red-500 hover:bg-red-400"
-            >
-              Sign Out
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-row bg-slate-200 h-[90vh] min-w-screen">
-          <div className="flex flex-col w-1/3 bg-slate-600">
-            {fetchedPublicGroups && <Friend userID={user.uid} />}
-          </div>
-          <div className="flex flex-col w-2/3 h-full overflow-auto items-center">
-            {publicGroups.map((group) => {
-              const latestMessage = group.data.latestMessage;
-              const lastOpenedByUser = findLastOpenedByUser(group, user.uid);
-              return (
-                <div className="flex flex-row w-11/12 m-1" key={group.id}>
-                  <div className="flex flex-row bg-purple-500 justify-between items-center w-full px-3 h-16 rounded-l-3xl text-2xl shadow-md">
-                    {group.id}
-                    {isLatestMessageRead(group) ? (
-                      <div className="flex text-neutral-700 bg-amber-500 h-1/2 items-center justify-center px-2 rounded-lg">
-                        <p>
-                          {lastOpenedByUser &&
-                            lastOpenedByUser.lastOpened
-                              .toDate()
-                              .toDateString()
-                              .toString() +
-                              " " +
-                              lastOpenedByUser.lastOpened
-                                .toDate()
-                                .toLocaleTimeString()
-                                .toString()}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="flex bg-emerald-700 text-lime-400 h-1/2 justify-center items-center px-2 rounded-lg text-xl">
-                        New:{" "}
-                        {latestMessage && latestMessage.data()
-                          ? latestMessage.data()!.sentBy
-                          : "NO ONE"}
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    className="bg-green-500 hover:bg-green-400 w-1/6 h-full rounded-r-3xl text-2xl shadow-lg"
-                    onClick={() => navigateGroup(group.id)}
-                  >
-                    Join
-                  </button>
-                </div>
-              );
-            })}
-            <div className="w-1/3 h-9">
+      {user && (
+        <div className="flex flex-col">
+          <div className="flex flex-row bg-orange-500 h-[10vh] min-w-full p-4 justify-between">
+            <div>
+              <img
+                className="max-h-full shadow-xl rounded-full"
+                src={`${user.photoURL}`}
+              />
+            </div>
+            <div className="flex bg-blue-300 w-1/5 rounded-2xl shadow-xl text-3xl items-center justify-center">
+              <p>{user.displayName}</p>
+            </div>
+            <div className="flex">
               <button
-                onClick={handleCreateGroupBtn}
-                className="bg-lime-500 hover:bg-lime-400 rounded-3xl drop-shadow-md w-full h-full"
+                onClick={handleSignOut}
+                className="rounded-3xl px-4 drop-shadow-md text-3xl bg-red-500 hover:bg-red-400"
               >
-                + Add a New Group
+                Sign Out
               </button>
             </div>
           </div>
+
+          <div className="flex flex-row bg-slate-200 h-[90vh] min-w-screen">
+            <div className="flex flex-col w-1/3 bg-slate-600">
+              {fetchedPublicGroups && <Friend userID={user.uid} />}
+            </div>
+            <div className="flex flex-col w-2/3 h-full overflow-auto items-center">
+              {publicGroups.map((group) => {
+                const latestMessage = group.data.latestMessage;
+                const lastOpenedByUser = findLastOpenedByUser(group, user.uid);
+                return (
+                  <div className="flex flex-row w-11/12 m-1" key={group.id}>
+                    <div className="flex flex-row bg-purple-500 justify-between items-center w-full px-3 h-16 rounded-l-3xl text-2xl shadow-md">
+                      {group.id}
+                      {isLatestMessageRead(group) ? (
+                        <div className="flex text-neutral-700 bg-amber-500 h-1/2 items-center justify-center px-2 rounded-lg">
+                          <p>
+                            {lastOpenedByUser &&
+                              lastOpenedByUser.lastOpened
+                                .toDate()
+                                .toDateString()
+                                .toString() +
+                                " " +
+                                lastOpenedByUser.lastOpened
+                                  .toDate()
+                                  .toLocaleTimeString()
+                                  .toString()}
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="flex bg-emerald-700 text-lime-400 h-1/2 justify-center items-center px-2 rounded-lg text-xl">
+                          New:{" "}
+                          {latestMessage && latestMessage.data()
+                            ? latestMessage.data()!.sentBy
+                            : "NO ONE"}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      className="bg-green-500 hover:bg-green-400 w-1/6 h-full rounded-r-3xl text-2xl shadow-lg"
+                      onClick={() => navigateGroup(group.id)}
+                    >
+                      Join
+                    </button>
+                  </div>
+                );
+              })}
+              <div className="w-1/3 h-9">
+                <button
+                  onClick={handleCreateGroupBtn}
+                  className="bg-lime-500 hover:bg-lime-400 rounded-3xl drop-shadow-md w-full h-full"
+                >
+                  + Add a New Group
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

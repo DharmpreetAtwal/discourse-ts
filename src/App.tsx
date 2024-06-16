@@ -51,6 +51,7 @@ function App() {
               path="privateGroup/:groupID/:friendID"
               element={<Group isPrivate={true} />}
             />
+            <Route path="*" element={<Auth />}></Route>
           </Routes>
         </Router>
       </UserIDStateContext.Provider>
