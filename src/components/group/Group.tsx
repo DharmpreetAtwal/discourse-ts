@@ -4,26 +4,32 @@ import { useSetOpenGroup } from "../../hooks/group/useSetOpenGroup";
 import { GroupProps } from "../../interfaces/group/groupTypes";
 import { GroupDisplay } from "./GroupDisplay";
 import { UserIDStateContext } from "../../App";
+import { useEnableOnlinePresence } from "../../hooks/useEnableOnlinePresence";
 
 export const Group: FC<GroupProps> = ({ isPrivate }) => {
   const { user } = useContext(UserIDStateContext);
-
   const { groupID } = useParams();
-
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const navigate = useNavigate();
   const { setOpenGroup } = useSetOpenGroup();
+  const { enableOnlinePresence } = useEnableOnlinePresence();
 
   useEffect(() => {
     if (user === undefined) {
       navigate("/", { replace: true });
+    } else {
+      enableOnlinePresence(user.uid);
+      if (groupID) {
+        setOpenGroup(user.uid, groupID);
+      }
     }
   }, [user]);
 
   // Avoid using setGroupLastOpenByUser() on Home Btn click, causes issues
   const handleBtnHome = () => {
     setOpenGroup(user.uid, "");
+
     navigate("/home");
   };
 

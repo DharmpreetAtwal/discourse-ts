@@ -12,6 +12,7 @@ import useSetGroupLastOpenByUser from "../../hooks/group/useSetGroupLastOpenByUs
 import { Group } from "../../interfaces/group/groupTypes";
 import { LastOpenByUser } from "../../interfaces/home/homeTypes";
 import { UserIDStateContext } from "../../App";
+import { useEnableOnlinePresence } from "../../hooks/useEnableOnlinePresence";
 
 const cookies = new Cookies();
 
@@ -27,6 +28,7 @@ export const Home: FC = () => {
   const { createPublicGroup } = useCreatePublicGroup();
   const { setOpenGroup } = useSetOpenGroup();
   const { setGroupLastOpenByUser } = useSetGroupLastOpenByUser();
+  const { enableOnlinePresence } = useEnableOnlinePresence();
 
   const navigateGroup = (groupID: string) => {
     if (groupID !== null) {
@@ -46,6 +48,7 @@ export const Home: FC = () => {
         setFetchedPublicGroups(true);
       };
 
+      enableOnlinePresence(user.uid);
       handleFetch();
     }
   }, [user]);

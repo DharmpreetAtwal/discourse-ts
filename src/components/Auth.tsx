@@ -11,19 +11,22 @@ import { FirebaseSVG } from "./FirebaseSVG";
 import { TypeScriptSVG } from "./TypeScriptSVG";
 import { UserIDStateContext } from "../App";
 import { GitHubSVG } from "./GitHubSVG";
+import { useEnableOnlinePresence } from "../hooks/useEnableOnlinePresence";
 
 const cookies = new Cookies();
 
 export const Auth: FC = () => {
   const { setUser } = useContext(UserIDStateContext);
   const navigate = useNavigate();
-  const { setIsOnline } = useSetIsOnline();
+
+  const { enableOnlinePresence } = useEnableOnlinePresence();
 
   useEffect(() => {
     const userCookie: User = cookies.get("user");
 
     if (userCookie !== undefined) {
       setUser(userCookie);
+      enableOnlinePresence(userCookie.uid);
       navigate("/home", { replace: true });
     }
   }, []);
@@ -62,18 +65,11 @@ export const Auth: FC = () => {
         });
       }
 
-      setIsOnline(docRef.id, true);
-
-      // Reset isOnline and openGroup upon disconnect
-      const userIsOnlineRef = ref(rtDB, docRef.id + "/isOnline");
-      const userOpenGroupRef = ref(rtDB, docRef.id + "/openGroup");
-      onDisconnect(userIsOnlineRef).set(false);
-      onDisconnect(userOpenGroupRef).set("");
+      enableOnlinePresence(docRef.id);
+      navigate("/home");
     } catch (err) {
       console.error(err);
     }
-
-    navigate("/home");
   };
 
   return (
