@@ -10,6 +10,7 @@ import { ReactSVG } from "./ReactSVG";
 import { FirebaseSVG } from "./FirebaseSVG";
 import { TypeScriptSVG } from "./TypeScriptSVG";
 import { UserIDStateContext } from "../App";
+import { GitHubSVG } from "./GitHubSVG";
 
 const cookies = new Cookies();
 
@@ -31,7 +32,6 @@ export const Auth: FC = () => {
     try {
       const info = await signInWithPopup(auth, providerGoogleAuth);
       cookies.set("user", info.user);
-      cookies.set("testing", { stuff: "fjkhadslkfha" });
 
       setUser(info.user);
 
@@ -83,29 +83,40 @@ export const Auth: FC = () => {
           {" "}
           Discourse{" "}
         </h1>
-        <h1 className="flex flex-row text-white text-3xl mt-2 justify-center items-center">
+        {/*<h1 className="flex flex-row text-white text-3xl mt-2 justify-center items-center">
           {" "}
           The{" "}
           <h2 className="justify-center items-center rounded-3xl w-fit px-4 bg-red-500 border-white border-0 text-white space-x-1">
             <p className="flex justify-center items-center">Real-Time</p>{" "}
           </h2>{" "}
           Chatting App
-        </h1>
+        </h1>*/}
+        <div className="flex flex-row space-x-1 mt-1">
+          <h1 className=" text-white text-3xl mt-2 justify-center items-center">
+            {" "}
+            The{" "}
+          </h1>
+          <h2 className="flex justify-center items-center text-3xl rounded-3xl w-fit px-4 bg-red-500 border-white border-0 text-white">
+            Real-Time
+          </h2>{" "}
+          <h1 className=" text-white text-3xl mt-2 justify-center items-center">
+            {" "}
+            Chatting App{" "}
+          </h1>
+        </div>
+
         <div className="text-white text-5xl flex flex-row items-center justify-center space-x-1 mt-3">
           <h1 className="text-3xl"> Made using: </h1>
           <div className="flex justify-center items-center space-x-2">
             <ReactSVG /> <p> + </p> <TypeScriptSVG /> <p> + </p> <FirebaseSVG />
           </div>
         </div>
-        <h2 className="text-xl text-purple-300 mb-16">
-          Created by:{" "}
-          <a
-            className="text-blue-400 underline"
-            href="https://github.com/DharmpreetAtwal"
-          >
-            Dharmpreet Atwal
-          </a>
-        </h2>
+        <a href="https://github.com/DharmpreetAtwal">
+          <div className="flex flex-row bg-zinc-100 hover:bg-slate-300 rounded-xl items-center space-x-1 px-2 py-1 mt-2 mb-16 shadow-2xl">
+            <h2 className="text-xl text-zinc-800">Dharmpreet Atwal</h2>
+            <GitHubSVG />
+          </div>
+        </a>
 
         <button onClick={signInGoogle} className="gsi-material-button">
           <div className="gsi-material-button-state"></div>

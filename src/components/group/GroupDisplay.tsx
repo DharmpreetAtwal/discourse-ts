@@ -123,7 +123,10 @@ export const GroupDisplay: FC<GroupDisplayProps> = ({
                 ref={userMessageInputRef}
                 placeholder="Message"
               />
-              <button className="bg-orange-500 text-3xl w-1/12" type="submit">
+              <button
+                className="bg-orange-500 hover:bg-orange-400 text-3xl w-1/12"
+                type="submit"
+              >
                 Submit
               </button>
             </form>

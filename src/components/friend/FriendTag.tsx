@@ -41,9 +41,9 @@ export const FriendTag: FC<FriendTagProps> = ({
           "w-1/5 h-3/4 text-xl rounded-lg m-1 shadow-md " +
           (isOnlineListener
             ? privateGroup === null
-              ? "bg-blue-500"
-              : "bg-green-500"
-            : "bg-slate-500")
+              ? "bg-blue-500 hover:bg-blue-400 "
+              : "bg-green-500 hover:bg-green-400 "
+            : "bg-slate-500 hover:bg-slate-400 ")
         }
       >
         Chat

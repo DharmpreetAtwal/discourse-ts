@@ -46,7 +46,10 @@ export const SidebarUI: FC<Sidebar> = ({ members, isPrivate, groupID }) => {
               ref={addMemberInputRef}
               placeholder="Add a Member"
             />
-            <button className="bg-purple-500" onClick={handleBtnAddMember}>
+            <button
+              className="bg-purple-500 hover:bg-purple-400"
+              onClick={handleBtnAddMember}
+            >
               Add Member
             </button>
           </div>

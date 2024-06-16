@@ -42,7 +42,7 @@ export const Friend: FC<FriendProps> = ({ userID }) => {
         </h2>
         <input ref={sendFriendRequestInputRef} className="bg-pink-500 w-5/6" />
         <button
-          className="bg-green-500 w-1/6"
+          className="bg-green-500 hover:bg-green-400 w-1/6"
           onClick={() =>
             sendFriendRequest(sendFriendRequestInputRef.current!.value, userID)
           }

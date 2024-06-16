@@ -22,7 +22,7 @@ export const PendingFriendTag: FC<PendingFriendsTagProps> = ({
 
       <button
         onClick={() => handleAddFriendButton(friendInfo.uid)}
-        className="w-1/6 h-full bg-orange-500"
+        className="w-1/6 h-full bg-orange-500 hover:bg-orange-400 "
       >
         Add Friend
       </button>

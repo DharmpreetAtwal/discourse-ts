@@ -7,7 +7,6 @@ import { UserIDStateContext } from "../../App";
 
 export const Group: FC<GroupProps> = ({ isPrivate }) => {
   const { user } = useContext(UserIDStateContext);
-  // const userID = credential.user.uid;
 
   const { groupID } = useParams();
 
@@ -38,7 +37,7 @@ export const Group: FC<GroupProps> = ({ isPrivate }) => {
         <div className="flex flex-row h-[10vh] bg-sky-500 justify-between">
           <div className="my-auto ml-1">
             <button
-              className="bg-orange-500 p-2 rounded-lg text-2xl drop-shadow-md"
+              className="bg-orange-500 hover:bg-orange-400 p-2 rounded-lg text-2xl drop-shadow-md"
               onClick={handleBtnHome}
             >
               Home
@@ -52,7 +51,7 @@ export const Group: FC<GroupProps> = ({ isPrivate }) => {
               onClick={handleBtnOpenSidebar}
               id="sidebarToggle"
               type="button"
-              className="bg-purple-500 text-2xl mx-2 p-2 rounded-lg shadow-sm"
+              className="bg-purple-500 hover:bg-purple-400 text-2xl mx-2 p-2 rounded-lg shadow-sm"
             >
               Open Sidebar
             </button>

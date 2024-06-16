@@ -53,9 +53,8 @@ export const Home: FC = () => {
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
+        cookies.remove("user", { path: "/" });
         navigate("/");
-        cookies.remove("uid", { path: "/" });
-
         setIsOnline(user.uid, false);
       })
       .catch((err) => {
@@ -127,7 +126,7 @@ export const Home: FC = () => {
           <div className="flex">
             <button
               onClick={handleSignOut}
-              className="rounded-3xl px-4 drop-shadow-md text-3xl bg-red-500"
+              className="rounded-3xl px-4 drop-shadow-md text-3xl bg-red-500 hover:bg-red-400"
             >
               Sign Out
             </button>
@@ -171,7 +170,7 @@ export const Home: FC = () => {
                     )}
                   </div>
                   <button
-                    className="bg-green-500 w-1/6 h-full rounded-r-3xl text-2xl shadow-lg"
+                    className="bg-green-500 hover:bg-green-400 w-1/6 h-full rounded-r-3xl text-2xl shadow-lg"
                     onClick={() => navigateGroup(group.id)}
                   >
                     Join
@@ -182,7 +181,7 @@ export const Home: FC = () => {
             <div className="w-1/3 h-9">
               <button
                 onClick={handleCreateGroupBtn}
-                className="bg-lime-500 rounded-3xl drop-shadow-md w-full h-full"
+                className="bg-lime-500 hover:bg-lime-400 rounded-3xl drop-shadow-md w-full h-full"
               >
                 + Add a New Group
               </button>
