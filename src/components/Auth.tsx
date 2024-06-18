@@ -112,6 +112,7 @@ export const Auth: FC = () => {
           </div>
         </a>
 
+        <p className="text-white text-xl"> Remember to Enable Cookies! </p>
         <button onClick={signInGoogle} className="gsi-material-button">
           <div className="gsi-material-button-state"></div>
           <div className="gsi-material-button-content-wrapper">
