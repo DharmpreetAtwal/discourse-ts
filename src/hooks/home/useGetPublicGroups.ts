@@ -49,7 +49,19 @@ export const useGetPublicGroups = () => {
 
     const promises = await Promise.all(promiseList);
     promises.forEach((latestMessage, index) => {
-      groupList[index].data.latestMessage = latestMessage;
+      const messageData = latestMessage.data();
+      if (messageData !== undefined) {
+        let latestMessageMap = {
+          id: latestMessage.id,
+          createdAt: messageData.createdAt,
+          message: messageData.message,
+          sentBy: messageData.sentBy,
+        };
+
+        groupList[index].data.latestMessage = latestMessageMap;
+      } else {
+        groupList[index].data.latestMessage = null;
+      }
     });
 
     return groupList;

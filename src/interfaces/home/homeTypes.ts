@@ -10,6 +10,6 @@ export interface GroupData {
   creatorID: string;
   isPrivate: boolean;
   lastOpenedByUser?: LastOpenByUser[];
-  latestMessage?: Message | null;
+  latestMessage: Message | null;
   members: string[];
 }
