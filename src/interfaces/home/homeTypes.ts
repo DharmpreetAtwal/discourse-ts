@@ -1,4 +1,5 @@
-import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
+import { Message } from "../group/groupTypes";
 
 export interface LastOpenByUser {
   userID: string;
@@ -9,6 +10,6 @@ export interface GroupData {
   creatorID: string;
   isPrivate: boolean;
   lastOpenedByUser?: LastOpenByUser[];
-  latestMessage?: DocumentSnapshot<DocumentData, DocumentData>;
+  latestMessage?: Message | null;
   members: string[];
 }

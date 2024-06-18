@@ -94,9 +94,9 @@ export const Home: FC = () => {
 
     if (lastOpenMap) {
       if (group.data.latestMessage) {
-        if (group.data.latestMessage.exists()) {
-          const data = group.data.latestMessage.data();
-          const latestMessageTime = data.createdAt.toDate();
+        if (group.data.latestMessage) {
+          const data = group.data.latestMessage.createdAt;
+          const latestMessageTime = data.toDate();
           return (
             latestMessageTime.getTime() <
             lastOpenMap.lastOpened.toDate().getTime()
@@ -166,10 +166,7 @@ export const Home: FC = () => {
                         </div>
                       ) : (
                         <div className="flex bg-emerald-700 text-lime-400 h-1/2 justify-center items-center px-2 rounded-lg text-xl">
-                          New:{" "}
-                          {latestMessage && latestMessage.data()
-                            ? latestMessage.data()!.sentBy
-                            : "NO ONE"}
+                          New: {latestMessage ? latestMessage.sentBy : "NO ONE"}
                         </div>
                       )}
                     </div>
