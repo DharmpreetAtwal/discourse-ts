@@ -9,21 +9,37 @@ import { useSetOpenGroup } from "../../hooks/group/useSetOpenGroup";
 import useSetGroupLastOpenByUser from "../../hooks/group/useSetGroupLastOpenByUser";
 import { useNavigate } from "react-router-dom";
 import { useGetGroup } from "../../hooks/group/useGetGroup";
+import { UserInfo } from "../../interfaces/types";
+import useGetUserInfo from "../../hooks/friend/useGetUserInfo";
 
 export const PublicGroupHomeTag: FC<PublicGroupHomeTageProps> = ({ group }) => {
   const { user } = useContext(UserIDStateContext);
   const { latestMessage } = useGetGroup(user.uid, group.id);
+  const [latestMessageSenderInfo, setLatestMessageSenderInfo] =
+    useState<UserInfo>();
   const [lastOpenedByUser, setLastOpenByUser] = useState<LastOpenByUser | null>(
     null
   );
 
   const { setOpenGroup } = useSetOpenGroup();
   const { setGroupLastOpenByUser } = useSetGroupLastOpenByUser();
+  const { getUserInfo } = useGetUserInfo();
   const navigate = useNavigate();
 
   useEffect(() => {
     setLastOpenByUser(findLastOpenedByUser(group, user.uid));
   }, []);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (latestMessage !== null) {
+        const userInfo = await getUserInfo(latestMessage.sentBy);
+        setLatestMessageSenderInfo(userInfo);
+      }
+    };
+
+    fetchUserInfo();
+  }, [latestMessage]);
 
   const findLastOpenedByUser = (
     group: Group,
@@ -58,19 +74,6 @@ export const PublicGroupHomeTag: FC<PublicGroupHomeTageProps> = ({ group }) => {
       } else {
         console.log("No Latest Msg");
       }
-
-      // if (lastOpenMap) {
-      //   if (group.data.latestMessage) {
-      //     if (group.data.latestMessage.createdAt) {
-      //       const latestMessageDate = group.data.latestMessage.createdAt.toDate();
-      //       return (
-      //         latestMessageDate.getTime() <
-      //         lastOpenMap.lastOpened.toDate().getTime()
-      //       );
-      //     }
-      //   } else {
-      //     console.log("No Latest Msg");
-      //   }
 
       // If the user has opened the group after the latest msg was sent, return true
     } else {
@@ -110,12 +113,23 @@ export const PublicGroupHomeTag: FC<PublicGroupHomeTageProps> = ({ group }) => {
               (latestMessage
                 ? "bg-emerald-700 text-lime-400"
                 : "bg-amber-500 text-red-600") +
-              "  h-1/2 justify-center items-center px-2 rounded-lg text-xl"
+              "  h-3/4 justify-center items-center px-2 rounded-lg text-xl space-x-2"
             }
           >
-            {latestMessage
-              ? "New: " + latestMessage.sentBy
-              : "No Latest Message"}
+            {latestMessageSenderInfo ? (
+              <p>New: </p>
+            ) : (
+              <p> No Latest Message </p>
+            )}
+            {latestMessageSenderInfo && (
+              <div className="flex justify-center items-center h-full flex-row text-inherit space-x-1">
+                <img
+                  className="rounded-full h-5/6"
+                  src={latestMessageSenderInfo.photoURL}
+                />
+                <p> {latestMessageSenderInfo.displayName} </p>
+              </div>
+            )}
           </div>
         )}
       </div>

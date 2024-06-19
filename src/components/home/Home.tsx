@@ -21,7 +21,7 @@ export const Home: FC = () => {
 
   const [publicGroups, setPublicGroups] = useState<Group[]>([]);
   const [fetchedPublicGroups, setFetchedPublicGroups] = useState(false);
-  //
+
   const navigate = useNavigate();
   const { setIsOnline } = useSetIsOnline();
   const { getPublicGroups } = useGetPublicGroups();
