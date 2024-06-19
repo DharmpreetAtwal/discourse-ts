@@ -24,15 +24,16 @@ export const useSendMessage = () => {
       const groupDoc = doc(db, "groups/" + groupID);
 
       if (message !== "") {
-        const docRef = await addDoc(groupMessagesCollection, {
+        await addDoc(groupMessagesCollection, {
           createdAt: Timestamp.now(),
           sentBy: userID,
           message: message,
-        });
-
-        await updateDoc(groupDoc, {
-          latestMessage: docRef,
-        });
+        }).then(
+          async (evaluated) =>
+            await updateDoc(groupDoc, {
+              latestMessage: evaluated,
+            })
+        );
 
         setGroupLastOpenByUser(userID, groupID);
       }

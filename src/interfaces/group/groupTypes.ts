@@ -13,6 +13,10 @@ export interface GroupDisplayProps {
   isSidebarVisible: boolean;
 }
 
+export interface PublicGroupHomeTageProps {
+  group: Group;
+}
+
 export interface Sidebar {
   members: UserInfo[];
   isPrivate: boolean;

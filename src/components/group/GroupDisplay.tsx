@@ -14,7 +14,7 @@ export const GroupDisplay: FC<GroupDisplayProps> = ({
   isPrivate,
   isSidebarVisible,
 }) => {
-  const { members, messages } = useGetGroup(userID, groupID);
+  const { members, messages } = useGetGroup(userID, groupID, true);
   const userMessageInputRef = useRef<HTMLInputElement>(null);
   const [fetched, setFetched] = useState(false);
 
