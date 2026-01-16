@@ -91,53 +91,96 @@ export const PublicGroupHomeTag: FC<PublicGroupHomeTageProps> = ({ group }) => {
   };
 
   return (
-    <div className="flex flex-row w-11/12 m-1" key={group.id}>
-      <div className="flex flex-row bg-purple-500 justify-between items-center w-full px-3 h-16 rounded-l-3xl text-2xl shadow-md">
-        {group.id}
-        {isLatestMessageRead(group) ? (
-          <div className="flex text-neutral-700 bg-amber-500 h-1/2 items-center justify-center px-2 rounded-lg">
-            <p>
-              {lastOpenedByUser &&
-                lastOpenedByUser.lastOpened.toDate().toDateString().toString() +
-                  " " +
-                  lastOpenedByUser.lastOpened
-                    .toDate()
-                    .toLocaleTimeString()
-                    .toString()}
-            </p>
+    <div
+      className="flex items-center gap-3 w-full bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] overflow-hidden border border-purple-200/50"
+      key={group.id}
+    >
+      {/* Group Info Section */}
+      <div className="flex-1 flex items-center justify-between px-5 py-4">
+        {/* Group ID/Name */}
+        <div className="flex items-center gap-3">
+          <div className="h-12 w-12 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+            <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
+              <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
+            </svg>
           </div>
-        ) : (
-          <div
-            className={
-              "flex " +
-              (latestMessage
-                ? "bg-emerald-700 text-lime-400"
-                : "bg-amber-500 text-red-600") +
-              "  h-3/4 justify-center items-center px-2 rounded-lg text-xl space-x-2"
-            }
-          >
-            {latestMessageSenderInfo ? (
-              <p>New: </p>
-            ) : (
-              <p> No Latest Message </p>
-            )}
-            {latestMessageSenderInfo && (
-              <div className="flex justify-center items-center h-full flex-row text-inherit space-x-1">
-                <img
-                  className="rounded-full h-5/6"
-                  src={latestMessageSenderInfo.photoURL}
-                />
-                <p> {latestMessageSenderInfo.displayName} </p>
+          <div className="flex flex-col">
+            <h3 className="text-lg font-bold text-gray-800 truncate max-w-xs">
+              Group {group.id.slice(0, 8)}...
+            </h3>
+            <p className="text-sm text-gray-500">Public conversation</p>
+          </div>
+        </div>
+
+        {/* Status Badge */}
+        <div className="flex items-center">
+          {isLatestMessageRead(group) ? (
+            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg border border-gray-300">
+              <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              <div className="flex flex-col text-xs">
+                <span className="text-gray-600 font-semibold">All caught up</span>
+                {lastOpenedByUser && (
+                  <span className="text-gray-500">
+                    {lastOpenedByUser.lastOpened.toDate().toLocaleDateString()}
+                  </span>
+                )}
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <div
+              className={
+                "flex items-center gap-2 px-4 py-2 rounded-lg " +
+                (latestMessage
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md"
+                  : "bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-md")
+              }
+            >
+              {latestMessageSenderInfo ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <img
+                        className="h-8 w-8 rounded-full object-cover ring-2 ring-white shadow-sm"
+                        src={latestMessageSenderInfo.photoURL}
+                        alt={latestMessageSenderInfo.displayName}
+                      />
+                      <div className="absolute -top-1 -right-1 h-4 w-4 bg-rose-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">!</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold">New message</span>
+                      <span className="text-xs font-medium opacity-90">
+                        from {latestMessageSenderInfo.displayName}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  <span className="text-sm font-bold">No messages yet</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Join Button */}
       <button
-        className="bg-green-500 hover:bg-green-400 w-1/6 h-full rounded-r-3xl text-2xl shadow-lg"
+        className="h-full px-8 py-4 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white font-bold text-lg rounded-r-2xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 group"
         onClick={() => navigateGroup(group.id)}
       >
-        Join
+        <span>Join</span>
+        <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
       </button>
     </div>
   );
