@@ -1,5 +1,5 @@
 import { setDoc, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { auth, db, providerGoogleAuth } from "../config/firebase";
+import { auth, db, providerGoogleAuth } from "../../config/firebase";
 import { User, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
@@ -7,9 +7,9 @@ import { FC, useContext, useEffect } from "react";
 import { ReactSVG } from "./ReactSVG";
 import { FirebaseSVG } from "./FirebaseSVG";
 import { TypeScriptSVG } from "./TypeScriptSVG";
-import { UserIDStateContext } from "../App";
+import { UserIDStateContext } from "../../App";
 import { GitHubSVG } from "./GitHubSVG";
-import { useEnableOnlinePresence } from "../hooks/useEnableOnlinePresence";
+import { useEnableOnlinePresence } from "../../hooks/useEnableOnlinePresence";
 
 const cookies = new Cookies();
 

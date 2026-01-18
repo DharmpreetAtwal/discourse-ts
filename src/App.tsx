@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { Auth } from "./components/Auth";
+import { Auth } from "./components/auth/Auth";
 import { Home } from "./components/home/Home";
 import { Group } from "./components/group/Group";
 import Cookies from "universal-cookie";
